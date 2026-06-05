@@ -4,10 +4,6 @@ include __DIR__ . '/../../layouts/admin_header.php';
 ?>
 <div class="admin-page-header"><h2>Verifikasi Pembayaran</h2></div>
 
-<div class="pdd-info mb-4">
-  <h6>SQL JOIN: INNER JOIN pada query verifikasi pembayaran</h6>
-</div>
-
 <div class="admin-card">
   <div class="card-head"><h5><i class="fas fa-credit-card me-2" style="color:#D4AF37;"></i>Semua Pembayaran</h5></div>
   <div style="overflow-x:auto;">

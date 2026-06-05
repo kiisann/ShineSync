@@ -10,11 +10,6 @@ include __DIR__ . '/../../layouts/admin_header.php';
   <a href="<?= APP_URL ?>/admin/products/create" class="btn-admin-gold"><i class="fas fa-plus"></i> Tambah Produk</a>
 </div>
 
-<div class="pdd-info mb-4">
-  <h6><i class="fas fa-database me-2"></i>PDD: Stored Procedure</h6>
-  <p>Seluruh operasi CRUD pada halaman ini menggunakan <code>CALL sp_select_produk()</code>, <code>CALL sp_insert_produk()</code>, <code>CALL sp_update_produk()</code>, <code>CALL sp_delete_produk()</code></p>
-</div>
-
 <div class="admin-card">
   <div class="card-head">
     <h5><i class="fas fa-gem me-2" style="color:#D4AF37;"></i>Daftar Produk <span style="color:#999;font-weight:400;font-size:.82rem;">(<?= count($products) ?> produk)</span></h5>

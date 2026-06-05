@@ -10,11 +10,6 @@ include __DIR__ . '/../../layouts/admin_header.php';
   <a href="<?= APP_URL ?>/admin/products" class="btn-admin-secondary"><i class="fas fa-arrow-left"></i> Kembali</a>
 </div>
 
-<div class="pdd-info mb-4">
-  <h6><i class="fas fa-database me-2"></i>PDD: Stored Procedure — sp_insert_produk</h6>
-  <p>Form ini memanggil <code>CALL sp_insert_produk(category_id, name, slug, description, price, stock, weight, material, image, is_featured)</code></p>
-</div>
-
 <form method="POST" action="<?= APP_URL ?>/admin/products/store" enctype="multipart/form-data">
   <div class="row g-4">
     <div class="col-lg-8">

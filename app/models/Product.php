@@ -92,15 +92,16 @@ class Product extends Model
     public function findBySlugWithReviews(string $slug): ?array
     {
         $product = $this->db->queryOne(
-            "SELECT p.*, c.name AS category_name,
-                    COALESCE(AVG(r.rating), 0) AS avg_rating,
-                    COUNT(DISTINCT r.id)        AS review_count
-             FROM products p
-             LEFT JOIN categories c ON p.category_id = c.id
-             LEFT JOIN reviews r    ON p.id = r.product_id AND r.is_approved = 1
-             WHERE p.slug = ? AND p.is_active = 1",
-            [$slug]
-        );
+        "SELECT p.*, c.name AS category_name,
+                COALESCE(AVG(r.rating), 0) AS avg_rating,
+                COUNT(DISTINCT r.id)        AS review_count
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        LEFT JOIN reviews r    ON p.id = r.product_id AND r.is_approved = 1
+        WHERE p.slug = ? AND p.is_active = 1
+        GROUP BY p.id",
+        [$slug]
+    );
 
         if ($product) {
             $product['reviews'] = $this->db->query(
@@ -134,6 +135,26 @@ class Product extends Model
         return $this->db->query(
             "SELECT * FROM view_produk_terlaris LIMIT ?", [$limit]
         );
+    }
+
+    public function getLowStock(int $threshold = 5): array
+    {
+        return $this->db->query(
+            "SELECT id, name, stock, image
+            FROM products
+            WHERE stock <= ? AND is_active = 1
+            ORDER BY stock ASC",
+            [$threshold]
+        );
+    }
+
+    public function countLowStock(int $threshold = 5): int
+    {
+        $row = $this->db->queryOne(
+            "SELECT COUNT(*) AS total FROM products WHERE stock <= ? AND is_active = 1",
+            [$threshold]
+        );
+        return (int)($row['total'] ?? 0);
     }
 
     public function findById(int $id): ?array

@@ -8,19 +8,18 @@ function fmtK($n){if($n>=1000000)return 'Rp '.round($n/1000000,1).'jt';if($n>=10
 <div class="row g-3 mb-4">
   <?php
   $stats = [
-    ['Total Produk',  $totalProducts,  'fas fa-gem',          'gold',    'Produk aktif (COUNT)'],
-    ['Total Customer',$totalCustomers, 'fas fa-users',        'success', 'Pengguna terdaftar (COUNT)'],
-    ['Total Pesanan', $totalOrders,    'fas fa-shopping-bag', 'info',    'Semua pesanan (COUNT)'],
-    ['Total Pendapatan', 'Rp ' . number_format($totalRevenue,0,',','.'), 'fas fa-coins', 'danger', 'Pembayaran verified (SUM)'],
+    ['Total Produk',  $totalProducts,  'fas fa-gem',          'gold'],
+    ['Total Customer',$totalCustomers, 'fas fa-users',        'success'],
+    ['Total Pesanan', $totalOrders,    'fas fa-shopping-bag', 'info'],
+    ['Total Pendapatan', 'Rp ' . number_format($totalRevenue,0,',','.'), 'fas fa-coins', 'danger'],
   ];
-  foreach ($stats as [$label,$val,$icon,$type,$hint]):
+  foreach ($stats as [$label,$val,$icon,$type]):
   ?>
   <div class="col-sm-6 col-xl-3">
     <div class="stat-card">
       <div class="stat-icon <?= $type ?>"><i class="<?= $icon ?>"></i></div>
       <div class="stat-value"><?= is_string($val) ? $val : number_format($val) ?></div>
       <div class="stat-label"><?= $label ?></div>
-      <div style="font-size:.72rem;color:#BBB;margin-top:6px;font-family:monospace;"><?= $hint ?></div>
     </div>
   </div>
   <?php endforeach; ?>
@@ -36,18 +35,63 @@ function fmtK($n){if($n>=1000000)return 'Rp '.round($n/1000000,1).'jt';if($n>=10
 </div>
 <?php endif; ?>
 
+<?php if (!empty($lowStockProducts)): ?>
+<div class="admin-card low-stock-card">
+  <div class="card-head">
+    <h5>
+      <i class="fas fa-exclamation-triangle me-2 low-stock-icon"></i>
+      Stok Menipis
+      <span class="low-stock-badge">
+        <?= $lowStockCount ?> produk
+      </span>
+    </h5>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Produk</th>
+          <th>Sisa Stok</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($lowStockProducts as $p): ?>
+        <tr>
+          <td class="product-name">
+            <?= htmlspecialchars($p['name']) ?>
+          </td>
+
+          <td>
+            <span class="stock-badge">
+              <?= $p['stock'] ?> tersisa
+            </span>
+          </td>
+
+          <td>
+            <a href="<?= APP_URL ?>/admin/products/edit/<?= $p['id'] ?>"
+               class="btn-action btn-view"
+               title="Update Stok">
+              <i class="fas fa-edit"></i>
+            </a>
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+</div>
+<?php endif; ?>
+
 <div class="row g-4 mb-4">
   <!-- Sales Chart (DATE_FORMAT) -->
   <div class="col-lg-8">
     <div class="admin-card">
       <div class="card-head">
         <h5><i class="fas fa-chart-line me-2" style="color:#D4AF37;"></i>Grafik Penjualan (12 Bulan)</h5>
-        <span class="pdd-badge"><i class="fas fa-database me-1"></i>DATE_FORMAT + SUM</span>
       </div>
       <div class="card-body">
-        <div class="pdd-info">
-          <h6>Implementasi: Built-in Function</h6>
-        </div>
         <div class="chart-wrap">
           <canvas id="salesChart"></canvas>
         </div>
@@ -93,7 +137,6 @@ function fmtK($n){if($n>=1000000)return 'Rp '.round($n/1000000,1).'jt';if($n>=10
     <div class="admin-card">
       <div class="card-head">
         <h5><i class="fas fa-trophy me-2" style="color:#D4AF37;"></i>Produk Terlaris</h5>
-        <span class="pdd-badge"><i class="fas fa-eye me-1"></i>VIEW: view_produk_terlaris</span>
       </div>
       <div class="card-body" style="padding:0;">
         <?php if (empty($bestsellers)): ?>
@@ -117,7 +160,6 @@ function fmtK($n){if($n>=1000000)return 'Rp '.round($n/1000000,1).'jt';if($n>=10
     <div class="admin-card">
       <div class="card-head">
         <h5><i class="fas fa-users me-2" style="color:#D4AF37;"></i>Customer Aktif</h5>
-        <span class="pdd-badge"><i class="fas fa-eye me-1"></i>VIEW: view_customer_aktif</span>
       </div>
       <div class="card-body" style="padding:0;">
         <?php if (empty($activeCustomers)): ?>

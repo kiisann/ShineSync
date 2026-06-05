@@ -28,10 +28,13 @@ class DashboardController extends Controller
         // VIEW: Customer aktif
         $activeCustomers = $reportModel->getCustomerAktif(5);
 
+        $lowStockProducts = $productModel->getLowStock(5);
+        $lowStockCount    = count($lowStockProducts);
+
         $pageTitle = 'Dashboard Admin — ShineSync';
         $this->view('admin/dashboard', compact(
             'totalProducts','totalCustomers','totalOrders','totalRevenue',
-            'pendingPayments','monthlySales','bestsellers','activeCustomers','pageTitle'
+            'pendingPayments','monthlySales','bestsellers','activeCustomers','pageTitle', 'lowStockProducts', 'lowStockCount'
         ));
     }
 
