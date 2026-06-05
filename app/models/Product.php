@@ -89,7 +89,6 @@ class Product extends Model
 
     /** Detail produk by slug dengan review (LEFT JOIN) */
     public function findBySlugWithReviews(string $slug): ?array
-<<<<<<< HEAD
     {
         $product = $this->db->queryOne(
         "SELECT p.*, c.name AS category_name,
@@ -100,23 +99,6 @@ class Product extends Model
         LEFT JOIN reviews r    ON p.id = r.product_id AND r.is_approved = 1
         WHERE p.slug = ? AND p.is_active = 1
         GROUP BY p.id",
-=======
-{
-    $product = $this->db->queryOne(
-        "SELECT p.*, 
-                c.name AS category_name,
-                COALESCE(AVG(r.rating), 0) AS avg_rating,
-                COUNT(DISTINCT r.id) AS review_count
-         FROM products p
-         LEFT JOIN categories c 
-                ON p.category_id = c.id
-         LEFT JOIN reviews r 
-                ON p.id = r.product_id 
-               AND r.is_approved = 1
-         WHERE p.slug = ?
-           AND p.is_active = 1
-         GROUP BY p.id",
->>>>>>> 40536b1d3c1702f09189c65c2f90dda456b5f408
         [$slug]
     );
 

@@ -90,13 +90,6 @@ function fmtK($n){if($n>=1000000)return 'Rp '.round($n/1000000,1).'jt';if($n>=10
         <h5><i class="fas fa-chart-line me-2" style="color:#D4AF37;"></i>Grafik Penjualan (12 Bulan)</h5>
       </div>
       <div class="card-body">
-<<<<<<< HEAD
-=======
-        <div class="pdd-info">
-          <h6>Implementasi: Built-in Function</h6>
-          <p><code>SELECT DATE_FORMAT(created_at,'%b %Y') AS label, SUM(total_amount), COUNT(id) FROM orders GROUP BY bulan</code></p>
-        </div>
->>>>>>> 40536b1d3c1702f09189c65c2f90dda456b5f408
         <div class="chart-wrap">
           <canvas id="salesChart"></canvas>
         </div>
