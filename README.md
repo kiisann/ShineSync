@@ -1,241 +1,205 @@
-# ShineSync — Sistem Informasi Penjualan Perhiasan Berbasis Web
+# 💍✨ ShineSync (Proyek UAP)
 
-Platform e-commerce perhiasan premium dengan PHP Native MVC + MySQL + Bootstrap 5.
+Proyek ini merupakan sistem e-commerce perhiasan berbasis web yang dibangun menggunakan PHP dan MySQL dengan arsitektur MVC (Model-View-Controller). Tujuannya sebagai platform jual beli perhiasan yang dilengkapi fitur manajemen produk, pemesanan, pembayaran, ulasan, dan laporan penjualan, dengan memanfaatkan stored procedure, function, trigger, view database, dan sistem loyalitas poin untuk pelanggan.
 
-## 🚀 Instalasi di Laragon
+<img width="1898" height="946" alt="image" src="https://github.com/user-attachments/assets/c8ddef2b-aa61-4a19-949a-772cf059a782" />
 
-### 1. Clone / Copy Project
-```bash
-# Copy folder ke:
-C:\laragon\www\ShineSyncNew\
+## 📌 Detail Konsep
+Stored procedure digunakan sebagai lapisan utama operasi CRUD pada produk, sesuai kebutuhan PDD (Procedure-Driven Design). Procedure disimpan di database sehingga menjamin konsistensi, efisiensi, dan keamanan eksekusi di sistem multi-user.
+Procedure yang diimplementasikan pada Product.php
+**sp_select_produk(p_id) — Mengambil semua produk atau berdasarkan ID**
+```sql
+public function getAllViaSP(): array
+{
+    return $this->db->callProcedure('sp_select_produk', [0]);
+}
+
+public function findByIdViaSP(int $id): ?array
+{
+    $rows = $this->db->callProcedure('sp_select_produk', [$id]);
+    return $rows[0] ?? null;
+}
+```
+**sp_insert_produk(...) — Menambahkan produk baru**
+```sql
+public function createViaSP(array $d): int
+{
+    $rows = $this->db->callProcedure('sp_insert_produk', [
+        (int)$d['category_id'], $d['name'], $d['slug'],
+        $d['description'] ?? '', (float)$d['price'], (int)$d['stock'],
+        (float)($d['weight'] ?? 0), $d['material'] ?? '', $d['image'] ?? '',
+        (int)($d['is_featured'] ?? 0)
+    ]);
+    return (int)($rows[0]['new_id'] ?? 0);
+}
 ```
 
-### 2. Import Database
-1. Buka **HeidiSQL** atau **phpMyAdmin** (http://localhost/phpmyadmin)
-2. Import file: `database/shinesync_db.sql`
-3. Database `shinesync_db` akan terbuat otomatis
+**sp_update_produk(...) — Memperbarui data produk**
+**sp_delete_produk(p_id) — Menghapus produk berdasarkan ID**
 
-### 3. Konfigurasi
-Edit `config/database.php` jika diperlukan:
+## 🔍 Function Database
+IsFacilityAvailable / logika ketersediaan stok — Function database digunakan untuk mengecek kondisi tertentu secara efisien di lapisan database.
+
+## ⚡ View Database
+**Digunakan untuk query kompleks yang sering dipanggil, misalnya laporan produk terlaris:**
+```sql
+public function getBestsellers(int $limit = 6): array
+{
+    return $this->db->query(
+        "SELECT * FROM view_produk_terlaris LIMIT ?", [$limit]
+    );
+}
+```
+View view_produk_terlaris dibangun dari agregasi data order_items dan orders yang sudah diconfirm, sehingga halaman beranda cukup memanggil satu view tanpa query berat.
+
+## 🛒 Fitur Checkout dengan Diskon Otomatis
+Sistem checkout menghitung diskon 10% secara otomatis bagi pelanggan yang berbelanja di atas Rp 1.000.000, sekaligus menampilkan estimasi poin loyalitas yang diperoleh:
+```sql
+// app/views/customer/checkout.php
+$discount = $total >= 1000000 ? $total * 0.1 : 0;
+$grand    = $total - $discount;
+$poin     = floor($grand / 10000);
+```
+Tampilan checkout mencakup:
+
+```sql
+Form informasi pengiriman (nama, telepon, alamat lengkap)
+Pilihan metode pembayaran: Transfer Bank, QRIS, COD
+Info rekening otomatis tampil saat Transfer Bank dipilih
+Ringkasan pesanan beserta estimasi poin loyalitas yang didapat
+```
+## 🎖️ Sistem Loyalitas Poin
+Setiap transaksi menghasilkan poin berdasarkan grand total pembelian (Rp 10.000 = 1 poin). Poin ditampilkan secara real-time di halaman checkout sebagai insentif bagi pelanggan.
+
+## 🚦 Routing & Arsitektur MVC
+Semua request masuk melalui index.php (Front Controller), kemudian di-route ke controller yang sesuai menggunakan PHP 8 match expression:
+### Route Customer
+| URL | Controller | Keterangan |
+|---|---|---|
+| `/` | `HomeController::index` | Halaman beranda |
+| `/products` | `ProductController::index` | Daftar produk |
+| `/products/{slug}` | `ProductController::detail` | Detail produk |
+| `/products/search` | `ProductController::search` | Pencarian produk |
+| `/cart` | `CartController::index` | Halaman keranjang |
+| `/cart/add` | `CartController::add` | Tambah ke keranjang |
+| `/checkout` | `CheckoutController::index` | Halaman checkout |
+| `/checkout/process` | `CheckoutController::process` | Proses pesanan |
+| `/orders` | `OrderController::history` | Riwayat pesanan |
+| `/wishlist` | `WishlistController::index` | Wishlist produk |
+| `/reviews/store` | `ReviewController::store` | Kirim ulasan |
+| `/profile` | `ProfileController::index` | Profil pengguna |
+
+### Route Admin
+| URL | Controller | Keterangan |
+|---|---|---|
+| `/admin` | `DashboardController::index` | Dashboard admin |
+| `/admin/products` | `ProductController::adminIndex` | Kelola produk |
+| `/admin/categories` | `CategoryController::adminIndex` | Kelola kategori |
+| `/admin/orders` | `OrderController::adminIndex` | Semua pesanan |
+| `/admin/orders/aktif` | `OrderController::adminAktif` | Order aktif |
+| `/admin/orders/arsip` | `OrderController::adminArsip` | Order arsip |
+| `/admin/payments` | `PaymentController::adminIndex` | Verifikasi pembayaran |
+| `/admin/customers` | `DashboardController::customers` | Data pelanggan |
+| `/admin/reviews` | `ReviewController::adminIndex` | Moderasi ulasan |
+| `/admin/reports` | `ReportController::index` | Laporan penjualan |
+
+---
+
+## 🗄️ Model & Relasi Database
+
+| Model | Tabel | Keterangan |
+|---|---|---|
+| `User` | `users` | Data pelanggan & admin |
+| `Product` | `products` | Produk perhiasan |
+| `Category` | `categories` | Kategori produk |
+| `Cart` | `cart_items` | Keranjang belanja |
+| `Order` | `orders`, `order_items` | Pesanan & detail item |
+| `Payment` | `payments` | Bukti pembayaran |
+| `Review` | `reviews` | Ulasan produk |
+| `Wishlist` | `wishlists` | Produk favorit |
+| `Report` | (view/query) | Laporan penjualan |
+
+Relasi produk dengan ulasan menggunakan **LEFT JOIN** untuk menjaga produk tetap tampil meski belum ada ulasan:
+
 ```php
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');        // Password database Anda
-define('DB_NAME', 'shinesync_db');
-define('APP_URL',  'http://localhost/ShineSyncNew');
+public function getActiveWithRating(int $categoryId = 0, string $search = '', string $sort = 'newest'): array
+{
+    // ...
+    return $this->db->query(
+        "SELECT p.*, c.name AS category_name,
+                COALESCE(AVG(r.rating), 0) AS avg_rating,
+                COUNT(DISTINCT r.id)        AS review_count
+         FROM products p
+         LEFT JOIN categories c ON p.category_id = c.id
+         LEFT JOIN reviews r    ON p.id = r.product_id AND r.is_approved = 1
+         {$whereStr}
+         GROUP BY p.id
+         ORDER BY {$orderBy}",
+        $params
+    );
+}
 ```
 
-### 4. Akses Aplikasi
-- **Toko:** http://localhost/ShineSyncNew
-- **Admin:** http://localhost/ShineSyncNew/admin/login
+---
 
-### 5. Akun Login
+## 🔐 Autentikasi & Otorisasi
+
+Sistem menggunakan `Session` class kustom dengan dua level akses:
+
+- **Customer** — Akses ke halaman belanja, riwayat pesanan, profil, wishlist, dan ulasan
+- **Admin** — Akses penuh ke panel admin (produk, kategori, pesanan, pembayaran, ulasan, laporan)
+
+Route admin dilindungi dengan `Session::requireAdmin()` yang otomatis redirect ke halaman login jika belum autentikasi.
+
+---
+
+## 💳 Alur Pembayaran
+
+1. Pelanggan checkout → memilih metode bayar (Transfer / QRIS / COD)
+2. Pesanan masuk dengan status `pending`
+3. Pelanggan upload bukti pembayaran di `/orders/payment/{order_id}`
+4. Admin verifikasi di `/admin/payments` → status berubah ke `confirmed`
+5. Admin proses pengiriman → status berubah ke `shipped` → `delivered`
+
+---
+
+## 🛠️ Teknologi
+
+| Komponen | Teknologi |
+|---|---|
+| Backend | PHP 8 (Pure MVC) |
+| Database | MySQL 8 |
+| Frontend | HTML5, CSS3, Bootstrap 5, Font Awesome |
+| Routing | Custom Front Controller (`index.php`) |
+| Session | Custom `Session` class |
+| DB Layer | Custom `Database` class (PDO-style) |
+
+---
+
+## ⚙️ Cara Menjalankan
+
+1. Clone atau extract project ke direktori web server (XAMPP/Laragon)
+2. Import database:
+   ```
+   database/shinesync_db.sql
+   ```
+3. Konfigurasi koneksi di `config/database.php`:
+   ```php
+   define('DB_HOST', 'localhost');
+   define('DB_NAME', 'shinesync');
+   define('DB_USER', 'root');
+   define('DB_PASS', '');
+   define('APP_URL',  'http://localhost/ShineSyncNew');
+   ```
+4. Akses aplikasi di browser:
+   - **Customer:** `http://localhost/ShineSyncNew`
+   - **Admin:** `http://localhost/ShineSyncNew/admin`
+
+---
+
+## 👤 Default Akun
 
 | Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@shinesync.com | password |
-| Customer | siti@example.com | password |
-| Customer | budi@example.com | password |
-
----
-
-## 📁 Struktur Folder
-
-```
-ShineSyncNew/
-├── index.php              ← Front Controller & Router
-├── .htaccess              ← URL Rewriting
-├── database/
-│   ├── shinesync_db.sql          ← Import utama ke phpMyAdmin
-│   └── trigger_fragmentasi.sql   ← Trigger sinkronisasi fragmentasi
-├── backup/
-│   └── mysqlbackup.bat    ← Script backup otomatis (Task Scheduler)
-├── config/
-│   └── database.php       ← Konfigurasi DB
-├── app/
-│   ├── core/              ← Database, Controller, Model, Session
-│   ├── controllers/       ← 13 Controller
-│   ├── models/            ← 9 Model
-│   └── views/             ← All Views
-│       ├── layouts/       ← Header & Footer
-│       ├── auth/          ← Login, Register
-│       ├── customer/      ← Halaman Customer
-│       └── admin/         ← Halaman Admin
-├── public/
-│   ├── css/               ← style.css, admin.css
-│   └── js/                ← main.js
-└── uploads/
-    ├── products/          ← Foto produk (otomatis)
-    └── payments/          ← Bukti pembayaran (otomatis)
-```
-
----
-
-## 🎓 Implementasi Materi PDD
-
-### 1. DATABASE VIEW ✅
-**File:** `database/shinesync_db.sql`
-- `view_laporan_penjualan` — digunakan di Admin Reports
-- `view_produk_terlaris` — digunakan di Dashboard Admin & Homepage
-- `view_customer_aktif` — digunakan di Dashboard Admin
-
-### 2. SQL JOIN ✅
-**INNER JOIN** — Detail pesanan, laporan penjualan:
-```sql
-FROM orders o
-INNER JOIN users u          ON o.user_id    = u.id
-INNER JOIN order_details od ON o.id         = od.order_id
-INNER JOIN products p       ON od.product_id = p.id
-```
-**LEFT JOIN** — Produk dengan review (produk tanpa review tetap tampil):
-```sql
-FROM products p
-LEFT JOIN categories c ON p.category_id = c.id
-LEFT JOIN reviews r    ON p.id = r.product_id
-```
-
-### 3. SET OPERATIONS ✅
-**File:** `app/models/Report.php` &nbsp;|&nbsp; **Tampil di:** `/admin/reports`
-
-**UNION** (hapus duplikat):
-```sql
-SELECT id, name, email, 'Pembeli'  FROM users INNER JOIN orders  ...
-UNION
-SELECT id, name, email, 'Reviewer' FROM users INNER JOIN reviews ...
-```
-**UNION ALL** (pertahankan semua baris):
-```sql
-SELECT ... FROM products WHERE category = 'cincin'
-UNION ALL
-SELECT ... FROM products WHERE category = 'kalung'
-```
-
-### 4. TRANSACTION ✅
-**File:** `app/controllers/CheckoutController.php`
-```php
-$this->db->beginTransaction();  // START TRANSACTION
-  // 1. INSERT orders
-  // 2. INSERT order_details  → trigger auto kurangi stok
-  // 3. INSERT payments
-  // 4. DELETE cart
-$this->db->commit();            // COMMIT
-// atau
-$this->db->rollback();          // ROLLBACK jika error
-```
-
-### 5. FUNCTION ✅
-**Built-in:** `SUM()`, `COUNT()`, `AVG()`, `DATE_FORMAT()` — digunakan di dashboard & laporan
-
-**Custom MySQL Function** — **File:** `database/shinesync_db.sql`
-```sql
-HitungDiskonMember(total)   -- Diskon 10% jika total >= Rp 1.000.000
-HitungPoinLoyalitas(total)  -- 1 poin per Rp 10.000
-```
-
-### 6. STORED PROCEDURE ✅
-**File:** `app/controllers/ProductController.php` &nbsp;|&nbsp; **Definisi:** `database/shinesync_db.sql`
-```sql
-CALL sp_insert_produk(...)  -- Tambah produk baru
-CALL sp_select_produk(0)    -- Ambil semua produk
-CALL sp_select_produk(id)   -- Ambil produk by ID
-CALL sp_update_produk(...)  -- Update produk
-CALL sp_delete_produk(id)   -- Hapus produk (soft delete)
-```
-
-### 7. TRIGGER ✅
-**File:** `database/shinesync_db.sql`, `database/trigger_fragmentasi.sql`
-
-| Nama Trigger | Event | Tabel | Fungsi |
-|---|---|---|---|
-| `tr_kurangi_stok` | `AFTER INSERT` | `order_details` | Kurangi stok produk otomatis saat item order masuk |
-| `tr_update_total_order` | `AFTER INSERT` | `order_details` | Recalculate `total_amount` di tabel `orders` |
-| `tr_auto_order_status` | `AFTER UPDATE` | `payments` | Ubah status order ke `processing` saat pembayaran diverifikasi |
-| `tr_log_review` | `AFTER INSERT` | `reviews` | Catat aktivitas review customer ke `activity_logs` |
-| `tr_frag_order_insert` | `AFTER INSERT` | `orders` | Masukkan order baru ke tabel fragmentasi yang sesuai |
-| `tr_frag_order_update` | `AFTER UPDATE` | `orders` | Pindahkan data antar tabel fragmentasi saat status order berubah |
-
-```sql
--- Contoh: tr_frag_order_update (sinkronisasi fragmentasi horizontal)
-CREATE TRIGGER tr_frag_order_update
-AFTER UPDATE ON orders FOR EACH ROW
-BEGIN
-    IF NEW.status <> OLD.status THEN
-        -- Hapus dari tabel fragmentasi lama
-        DELETE FROM orders_pending     WHERE id = OLD.id;
-        -- Insert ke tabel fragmentasi baru sesuai status
-        INSERT INTO orders_processing (...) VALUES (NEW.id, ...);
-    END IF;
-END
-```
-
-### 8. FRAGMENTASI ✅
-**File:** `database/shinesync_db.sql`, `database/trigger_fragmentasi.sql`
-
-**Fragmentasi Horizontal** — Tabel `orders` dipecah berdasarkan status pesanan:
-```sql
-orders_pending     -- status = 'pending'
-orders_processing  -- status IN ('confirmed', 'processing', 'shipped')
-orders_completed   -- status = 'delivered'
-orders_cancelled   -- status = 'cancelled'
-```
-Data di tabel fragmentasi diisi dan disinkronisasi **secara otomatis** oleh trigger `tr_frag_order_insert` dan `tr_frag_order_update`.
-
-**Fragmentasi Vertikal** — Tabel `products` dipecah berdasarkan kelompok kolom:
-```sql
-products_info    -- id, name, slug, category_id, is_active, created_at
-products_pricing -- id, price, stock, weight
-products_detail  -- id, description, updated_at
-```
-Kolom yang sering diakses saat listing produk dipisahkan dari kolom detail dan harga untuk efisiensi query.
-
-### 9. BACKUP DATABASE ✅
-**File:** `backup/mysqlbackup.bat`
-
-Script backup otomatis menggunakan `mysqldump` yang dijadwalkan via **Windows Task Scheduler**:
-```bat
-set "dbName=shinesync_db"
-"%mysqlDir%\mysqldump" -u adm_backup -ppassword %dbName% > "%backupDir%\backup_%timestamp%.sql"
-```
-- Backup berjalan **otomatis setiap hari** sesuai jadwal Task Scheduler
-- File backup diberi nama dengan **timestamp** otomatis, contoh: `backup_2026-06-05_08-00.sql`
-- Disimpan di folder `D:\Backup`
-
----
-
-## 🎨 Teknologi
-
-| Layer | Teknologi |
-|-------|-----------|
-| Frontend | HTML5, CSS3, Bootstrap 5, JavaScript |
-| Backend | PHP Native (MVC) |
-| Database | MySQL 8.0 |
-| Web Server | Apache (Laragon) |
-| DB Access | mysqli |
-| Auth | PHP Session + password_hash |
-| Font | Poppins (Google Fonts) |
-
----
-
-## 🌐 URL Map
-
-| URL | Keterangan |
-|-----|------------|
-| `/` | Homepage |
-| `/products` | Katalog produk |
-| `/products/{slug}` | Detail produk |
-| `/cart` | Keranjang |
-| `/checkout` | Checkout (TRANSACTION) |
-| `/orders` | Riwayat pesanan |
-| `/wishlist` | Wishlist |
-| `/profile` | Profil customer |
-| `/auth/login` | Login customer |
-| `/auth/register` | Registrasi |
-| `/admin/login` | Login admin |
-| `/admin/dashboard` | Dashboard admin |
-| `/admin/products` | Kelola produk (Stored Procedure) |
-| `/admin/categories` | Kelola kategori |
-| `/admin/orders` | Kelola pesanan (Trigger fragmentasi) |
-| `/admin/payments` | Verifikasi pembayaran (Trigger auto status) |
-| `/admin/customers` | Data customer |
-| `/admin/reviews` | Kelola review (Trigger log) |
-| `/admin/reports` | Laporan PDD (VIEW + JOIN + UNION + Fragmentasi) |
+|---|---|---|
+| Admin | admin@shinesync.com | admin123 |
+| Customer | (daftar via `/auth/register`) | — |
