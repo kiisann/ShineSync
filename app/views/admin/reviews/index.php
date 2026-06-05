@@ -1,5 +1,4 @@
 <?php
-// app/views/admin/reviews/index.php
 include __DIR__ . '/../../layouts/admin_header.php';
 ?>
 <div class="admin-page-header"><h2>Kelola Review</h2></div>

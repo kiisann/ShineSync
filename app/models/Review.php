@@ -1,5 +1,4 @@
 <?php
-// app/models/Review.php
 class Review extends Model
 {
     public function create(array $d): int

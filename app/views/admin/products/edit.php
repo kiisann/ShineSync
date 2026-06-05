@@ -1,5 +1,4 @@
 <?php
-// app/views/admin/products/edit.php
 include __DIR__ . '/../../layouts/admin_header.php';
 $img = ($product['image']&&file_exists(UPLOAD_PATH.'products/'.$product['image'])) ? APP_URL.'/uploads/products/'.$product['image'] : APP_URL.'/public/images/no-image.svg';
 ?>

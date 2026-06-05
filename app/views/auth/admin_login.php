@@ -1,4 +1,4 @@
-<?php // app/views/auth/admin_login.php ?>
+<?php ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -48,11 +48,6 @@
     <a href="<?= APP_URL ?>/auth/login" style="color:#D4AF37;">← Kembali ke halaman customer</a>
   </p>
 
-  <div style="margin-top:20px;padding:12px 16px;background:#F8F8F8;border-radius:10px;font-size:.78rem;color:#888;">
-    <strong style="color:#555;">Demo Login:</strong><br>
-    Email: admin@shinesync.com<br>
-    Password: password
-  </div>
 </div>
 </body>
 </html>

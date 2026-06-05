@@ -1,9 +1,8 @@
 <?php
-// app/models/Product.php
 // CRUD menggunakan Stored Procedure (PDD requirement)
 class Product extends Model
 {
-    // ── Stored Procedures ─────────────────────────────────────
+    // Stored Procedures 
 
     /** sp_select_produk: 0 = semua, >0 = by ID */
     public function getAllViaSP(): array
@@ -45,9 +44,9 @@ class Product extends Model
         return true;
     }
 
-    // ── Customer Queries (LEFT JOIN untuk produk + review) ───
+    // Customer Queries (LEFT JOIN untuk produk + review)
 
-    /** Semua produk aktif dengan rating rata-rata (LEFT JOIN) */
+    // Semua produk aktif dengan rating rata-rata (LEFT JOIN)
     public function getActiveWithRating(int $categoryId = 0, string $search = '', string $sort = 'newest'): array
     {
         $sortMap = [

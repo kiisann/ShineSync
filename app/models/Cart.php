@@ -1,5 +1,4 @@
 <?php
-// app/models/Cart.php
 class Cart extends Model
 {
     public function getOrCreateCart(int $userId): int

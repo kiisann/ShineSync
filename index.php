@@ -4,7 +4,7 @@
  * Semua request masuk ke sini melalui .htaccess
  */
 
-// ── Bootstrap ─────────────────────────────────────────────────
+// Bootstrap
 define('ROOT_PATH', __DIR__);
 
 require_once ROOT_PATH . '/config/database.php';
@@ -16,13 +16,13 @@ require_once ROOT_PATH . '/app/core/Session.php';
 // Start session
 Session::start();
 
-// ── Models ────────────────────────────────────────────────────
+// Models
 $models = ['User','Product','Category','Cart','Order','Payment','Review','Wishlist','Report'];
 foreach ($models as $m) {
     require_once ROOT_PATH . "/app/models/{$m}.php";
 }
 
-// ── Controllers ───────────────────────────────────────────────
+// Controllers 
 $controllers = [
     'Auth','Home','Product','Category','Cart',
     'Checkout','Order','Payment','Review',
@@ -32,7 +32,7 @@ foreach ($controllers as $c) {
     require_once ROOT_PATH . "/app/controllers/{$c}Controller.php";
 }
 
-// ── Routing ───────────────────────────────────────────────────
+// Routing 
 $uri    = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 $base   = trim(parse_url(APP_URL, PHP_URL_PATH), '/');
 $uri    = $base ? preg_replace('#^' . preg_quote($base, '#') . '#', '', $uri) : $uri;
@@ -43,9 +43,9 @@ $segment0 = $parts[0] ?? '';
 $segment1 = $parts[1] ?? '';
 $segment2 = $parts[2] ?? '';
 
-// ── Route Table ───────────────────────────────────────────────
+// Route Table 
 try {
-    // ── AUTH ─────────────────────────────────────────────────
+    // AUTH 
     if ($segment0 === 'auth') {
         $ctrl = new AuthController();
         match ($segment1) {
@@ -56,13 +56,13 @@ try {
         };
     }
 
-    // ── ADMIN LOGIN ──────────────────────────────────────────
+    // ADMIN LOGIN 
     elseif ($segment0 === 'admin' && $segment1 === 'login') {
         $ctrl = new AuthController();
         $ctrl->adminLogin();
     }
 
-    // ── ADMIN ROUTES ─────────────────────────────────────────
+    // ADMIN ROUTES 
     elseif ($segment0 === 'admin') {
         Session::requireAdmin();
 
@@ -122,7 +122,7 @@ try {
         };
     }
 
-    // ── CUSTOMER / PUBLIC ROUTES ─────────────────────────────
+    // ── CUSTOMER / PUBLIC ROUTES 
     else {
         match ($segment0) {
             // Home
