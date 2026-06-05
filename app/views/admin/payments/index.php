@@ -5,7 +5,6 @@ include __DIR__ . '/../../layouts/admin_header.php';
 
 <div class="pdd-info mb-4">
   <h6>SQL JOIN: INNER JOIN pada query verifikasi pembayaran</h6>
-  <p><code>FROM payments p INNER JOIN orders o ON p.order_id = o.id INNER JOIN users u ON o.user_id = u.id</code></p>
 </div>
 
 <div class="admin-card">

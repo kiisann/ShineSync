@@ -40,6 +40,22 @@ class OrderController extends Controller
         $this->view('admin/orders/index', compact('orders', 'pageTitle'));
     }
 
+    public function adminAktif(): void
+    {
+        Session::requireAdmin();
+        $orders    = $this->orderModel->getAktif();
+        $pageTitle = 'Order Aktif';
+        $this->view('admin/orders/aktif', compact('orders', 'pageTitle'));
+    }
+
+    public function adminArsip(): void
+    {
+        Session::requireAdmin();
+        $orders    = $this->orderModel->getArsip();
+        $pageTitle = 'Order Arsip';
+        $this->view('admin/orders/arsip', compact('orders', 'pageTitle'));
+    }
+    
     public function adminDetail(int $id): void
     {
         Session::requireAdmin();

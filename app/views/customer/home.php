@@ -159,7 +159,6 @@ function productImg($img) {
 <section class="ss-section bg-light-gold" id="bestsellers">
   <div class="container">
     <div class="text-center mb-5">
-      <p class="text-gold mb-1" style="font-size:.85rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;">View: view_produk_terlaris</p>
       <h2 class="section-title">Produk Terlaris</h2>
       <div class="gold-line center"></div>
     </div>

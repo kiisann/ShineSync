@@ -3,7 +3,7 @@
 define('DB_HOST',     'localhost');
 define('DB_USER',     'root');
 define('DB_PASS',     '');
-define('DB_NAME',     'db_shinesync');
+define('DB_NAME',     'shinesync_db');
 define('DB_PORT',     3306);
 define('DB_CHARSET',  'utf8mb4');
 

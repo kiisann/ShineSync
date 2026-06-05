@@ -94,6 +94,8 @@ try {
             'orders' => match ($segment2) {
                 'detail'       => (new OrderController())->adminDetail($parts[3] ?? 0),
                 'update-status'=> (new OrderController())->adminUpdateStatus(),
+                'aktif'        => (new OrderController())->adminAktif(),
+                'arsip'        => (new OrderController())->adminArsip(),
                 default        => (new OrderController())->adminIndex()
             },
 

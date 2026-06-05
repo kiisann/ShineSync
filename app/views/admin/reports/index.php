@@ -1,7 +1,7 @@
 <?php
 // PDD: VIEW + JOIN + UNION + UNION ALL
 include __DIR__ . '/../../layouts/admin_header.php';
-function fRpR($n){return 'Rp '.number_format($n,0,',','.');}
+function fRpR($n){return 'Rp '.number_format((float)($n??0),0,',','.');}
 ?>
 <div class="admin-page-header">
   <h2><i class="fas fa-chart-bar me-2" style="color:#D4AF37;"></i>Laporan &amp; Implementasi PDD</h2>
@@ -73,9 +73,9 @@ function fRpR($n){return 'Rp '.number_format($n,0,',','.');}
             <td style="font-weight:600;font-size:.85rem;">#<?= htmlspecialchars($r['order_number']) ?></td>
             <td><?= htmlspecialchars($r['nama_customer']) ?></td>
             <td style="font-size:.82rem;color:#777;"><?= htmlspecialchars($r['tanggal_pesanan']) ?></td>
-            <td>Rp <?= number_format($r['total_amount'],0,',','.') ?></td>
-            <td style="color:#28A745;">Rp <?= number_format($r['discount'],0,',','.') ?></td>
-            <td style="font-weight:700;color:#D4AF37;">Rp <?= number_format($r['grand_total'],0,',','.') ?></td>
+            <td>Rp <?= number_format((float)($r['total_amount']??0),0,',','.') ?></td>
+            <td style="color:#28A745;">Rp <?= number_format((float)($r['discount']??0),0,',','.') ?></td>
+            <td style="font-weight:700;color:#D4AF37;">Rp <?= number_format((float)($r['grand_total']??0),0,',','.') ?></td>
             <td><span class="status-badge status-<?= $r['status_pesanan'] ?>"><?= ucfirst($r['status_pesanan']) ?></span></td>
             <td><?php if($r['status_pembayaran']): ?><span class="status-badge status-<?= $r['status_pembayaran'] ?>"><?= ucfirst($r['status_pembayaran']) ?></span><?php endif; ?></td>
           </tr>
@@ -128,8 +128,8 @@ function fRpR($n){return 'Rp '.number_format($n,0,',','.');}
               <tr>
                 <td style="font-weight:600;font-size:.85rem;"><?= htmlspecialchars($r['name']) ?></td>
                 <td><?= htmlspecialchars($r['kategori']) ?></td>
-                <td>Rp <?= number_format($r['price'],0,',','.') ?></td>
-                <td><?= $r['stock'] ?></td>
+                <td>Rp <?= number_format((float)($r['price']??0),0,',','.') ?></td>
+                <td><?= $r['stock']??0 ?></td>
                 <td><span style="background:rgba(23,162,184,.1);color:#138496;padding:3px 10px;border-radius:20px;font-size:.75rem;"><?= $r['sumber'] ?></span></td>
               </tr>
               <?php endforeach; ?>
