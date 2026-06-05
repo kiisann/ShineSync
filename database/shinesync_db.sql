@@ -2,8 +2,11 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
+-- Host: localhost:3-- Genera<<<<<<< HEAD
 -- Generation Time: Jun 05, 2026 at 01:35 PM
+=======
+-- Generation Time: Jun 05, 2026 at 01:28 PM
+>>>>>>> e7bdf6f (Perbaiki detail produk)
 -- Server version: 8.0.30
 -- PHP Version: 8.3.26
 
@@ -184,6 +187,7 @@ CREATE TABLE `orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+<<<<<<< HEAD
 -- Dumping data for table `orders`
 --
 
@@ -191,6 +195,8 @@ INSERT INTO `orders` (`id`, `user_id`, `order_number`, `total_amount`, `discount
 (3, 11, 'SS-2026-8387-536', '25000000.00', '2500000.00', '22500000.00', 2250, 'Achira Desya Lucy', '0812345678978', 'mz xmZ xm zm zm zm znknnk', 'zzzzzzzzzzzzzzzzzzzzzzzzzz', 'pending', '2026-06-05 13:35:36', '2026-06-05 13:35:36');
 
 --
+=======
+>>>>>>> e7bdf6f (Perbaiki detail produk)
 -- Triggers `orders`
 --
 DELIMITER $$
@@ -346,6 +352,7 @@ CREATE TABLE `orders_arsip` (
   `id` int UNSIGNED NOT NULL DEFAULT '0',
   `user_id` int UNSIGNED NOT NULL,
   `order_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+<<<<<<< HEAD
   `total_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
   `discount` decimal(15,2) DEFAULT '0.00',
   `grand_total` decimal(15,2) NOT NULL DEFAULT '0.00',
@@ -424,6 +431,38 @@ CREATE TABLE `orders_pending` (
   `id` int UNSIGNED NOT NULL DEFAULT '0',
   `user_id` int UNSIGNED NOT NULL,
   `order_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+=======
+>>>>>>> e7bdf6f (Perbaiki detail produk)
+  `total_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `discount` decimal(15,2) DEFAULT '0.00',
+  `grand_total` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `loyalty_points` int DEFAULT '0',
+  `shipping_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `status` enum('pending','confirmed','processing','shipped','delivered','cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders_pending`
+--
+
+INSERT INTO `orders_pending` (`id`, `user_id`, `order_number`, `total_amount`, `discount`, `grand_total`, `loyalty_points`, `shipping_name`, `shipping_phone`, `shipping_address`, `notes`, `status`, `created_at`, `updated_at`) VALUES
+(3, 11, 'SS-2026-8387-536', '25000000.00', '2500000.00', '22500000.00', 2250, 'Achira Desya Lucy', '0812345678978', 'mz xmZ xm zm zm zm znknnk', 'zzzzzzzzzzzzzzzzzzzzzzzzzz', 'pending', '2026-06-05 13:35:36', '2026-06-05 13:35:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders_processing`
+--
+
+CREATE TABLE `orders_processing` (
+  `id` int UNSIGNED NOT NULL DEFAULT '0',
+  `user_id` int UNSIGNED NOT NULL,
+  `order_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
   `discount` decimal(15,2) DEFAULT '0.00',
   `grand_total` decimal(15,2) NOT NULL DEFAULT '0.00',
@@ -437,12 +476,74 @@ CREATE TABLE `orders_pending` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `orders_pending`
+-- Table structure for table `orders_cancelled`
 --
 
-INSERT INTO `orders_pending` (`id`, `user_id`, `order_number`, `total_amount`, `discount`, `grand_total`, `loyalty_points`, `shipping_name`, `shipping_phone`, `shipping_address`, `notes`, `status`, `created_at`, `updated_at`) VALUES
-(3, 11, 'SS-2026-8387-536', '25000000.00', '2500000.00', '22500000.00', 2250, 'Achira Desya Lucy', '0812345678978', 'mz xmZ xm zm zm zm znknnk', 'zzzzzzzzzzzzzzzzzzzzzzzzzz', 'pending', '2026-06-05 13:35:36', '2026-06-05 13:35:36');
+CREATE TABLE `orders_cancelled` (
+  `id` int UNSIGNED NOT NULL DEFAULT '0',
+  `user_id` int UNSIGNED NOT NULL,
+  `order_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `discount` decimal(15,2) DEFAULT '0.00',
+  `grand_total` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `loyalty_points` int DEFAULT '0',
+  `shipping_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_address` text COLLATE utf8mb4_unicode_ci,
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('pending','confirmed','processing','shipped','delivered','cancelled') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders_completed`
+--
+
+CREATE TABLE `orders_completed` (
+  `id` int UNSIGNED NOT NULL DEFAULT '0',
+  `user_id` int UNSIGNED NOT NULL,
+  `order_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `discount` decimal(15,2) DEFAULT '0.00',
+  `grand_total` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `loyalty_points` int DEFAULT '0',
+  `shipping_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_address` text COLLATE utf8mb4_unicode_ci,
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('pending','confirmed','processing','shipped','delivered','cancelled') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders_pending`
+--
+
+CREATE TABLE `orders_pending` (
+  `id` int UNSIGNED NOT NULL DEFAULT '0',
+  `user_id` int UNSIGNED NOT NULL,
+  `order_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `discount` decimal(15,2) DEFAULT '0.00',
+  `grand_total` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `loyalty_points` int DEFAULT '0',
+  `shipping_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shipping_address` text COLLATE utf8mb4_unicode_ci,
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('pending','confirmed','processing','shipped','delivered','cancelled') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -484,6 +585,7 @@ CREATE TABLE `order_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+<<<<<<< HEAD
 -- Dumping data for table `order_details`
 --
 
@@ -491,6 +593,8 @@ INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `product_name`, `qu
 (3, 3, 9, 'Kalung Super', 1, '25000000.00', '25000000.00');
 
 --
+=======
+>>>>>>> e7bdf6f (Perbaiki detail produk)
 -- Triggers `order_details`
 --
 DELIMITER $$
@@ -536,6 +640,7 @@ CREATE TABLE `payments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+<<<<<<< HEAD
 -- Dumping data for table `payments`
 --
 
@@ -543,6 +648,8 @@ INSERT INTO `payments` (`id`, `order_id`, `amount`, `method`, `bank_name`, `acco
 (3, 3, '22500000.00', 'cod', '', '', NULL, 'pending', NULL, NULL, NULL, '2026-06-05 13:35:36');
 
 --
+=======
+>>>>>>> e7bdf6f (Perbaiki detail produk)
 -- Triggers `payments`
 --
 DELIMITER $$
@@ -586,7 +693,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `description`, `price`, `stock`, `weight`, `material`, `image`, `is_featured`, `is_active`, `created_at`, `updated_at`) VALUES
+<<<<<<< HEAD
 (9, 9, 'Kalung Super', 'kalung-super', 'jsandxhkabsdhchahndxuwnquewh', '25000000.00', 49, '50.00', 'Emas 15k', '6a22ae893e673.jpg', 0, 1, '2026-06-05 11:07:54', '2026-06-05 13:35:36');
+=======
+(9, 9, 'Kalung Super', 'kalung-super', 'jsandxhkabsdhchahndxuwnquewh', '25000000.00', 50, '50.00', 'Emas 15k', '6a22ae893e673.jpg', 0, 1, '2026-06-05 11:07:54', '2026-06-05 12:24:59');
+>>>>>>> e7bdf6f (Perbaiki detail produk)
 
 -- --------------------------------------------------------
 
@@ -952,7 +1063,11 @@ ALTER TABLE `carts`
 -- AUTO_INCREMENT for table `cart_details`
 --
 ALTER TABLE `cart_details`
+<<<<<<< HEAD
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+=======
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+>>>>>>> e7bdf6f (Perbaiki detail produk)
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -964,63 +1079,31 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
+<<<<<<< HEAD
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+=======
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+>>>>>>> e7bdf6f (Perbaiki detail produk)
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
+<<<<<<< HEAD
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+=======
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+>>>>>>> e7bdf6f (Perbaiki detail produk)
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
+<<<<<<< HEAD
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `products`
---
-ALTER TABLE `products`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `product_images`
---
-ALTER TABLE `product_images`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `reviews`
---
-ALTER TABLE `reviews`
+=======
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT for table `wishlist`
---
-ALTER TABLE `wishlist`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `activity_logs`
---
-ALTER TABLE `activity_logs`
-  ADD CONSTRAINT `activity_logs_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `carts`
---
+>>>>>>> e7bdf6f (Perbaiki detail produk)
 ALTER TABLE `carts`
   ADD CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
@@ -1041,44 +1124,40 @@ ALTER TABLE `orders`
 -- Constraints for table `order_details`
 --
 ALTER TABLE `order_details`
-  ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE RESTRICT;
+GNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- Constraints for table `payments`
+-- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `payments_ibfk_2` FOREIGN KEY (`verified_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- Constraints for table `products`
+-- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE RESTRICT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- Constraints for table `product_images`
+-- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for table `reviews`
+-- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  ADD CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `reviews_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- Constraints for table `wishlist`
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `wishlist_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
