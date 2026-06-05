@@ -1,4 +1,4 @@
-<?php // app/views/auth/login.php ?>
+<?php ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>

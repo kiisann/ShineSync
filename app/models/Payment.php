@@ -1,5 +1,4 @@
 <?php
-// app/models/Payment.php
 class Payment extends Model
 {
     public function create(array $d): int

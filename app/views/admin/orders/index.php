@@ -1,5 +1,4 @@
 <?php
-// app/views/admin/orders/index.php
 include __DIR__ . '/../../layouts/admin_header.php';
 $statusLabels=['pending'=>'Menunggu','confirmed'=>'Dikonfirmasi','processing'=>'Diproses','shipped'=>'Dikirim','delivered'=>'Terkirim','cancelled'=>'Dibatalkan'];
 ?>

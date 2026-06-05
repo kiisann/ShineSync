@@ -1,5 +1,5 @@
 <?php
-// app/core/Session.php — Session helper
+// Session helper
 class Session
 {
     public static function start(): void
@@ -55,7 +55,7 @@ class Session
         return $msg;
     }
 
-    // ── Auth Helpers ──────────────────────────────────────────
+    // Auth Helpers
 
     public static function isLoggedIn(): bool
     {

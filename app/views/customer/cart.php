@@ -1,5 +1,4 @@
 <?php
-// app/views/customer/cart.php
 include __DIR__ . '/../layouts/header.php';
 function fRp($n){return 'Rp '.number_format($n,0,',','.');}
 ?>

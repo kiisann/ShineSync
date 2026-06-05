@@ -1,5 +1,4 @@
 <?php
-// app/views/admin/categories/index.php
 include __DIR__ . '/../../layouts/admin_header.php';
 ?>
 <div class="admin-page-header">

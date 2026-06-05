@@ -1,5 +1,4 @@
 <?php
-// app/views/admin/orders/detail.php
 include __DIR__ . '/../../layouts/admin_header.php';
 function fRpAd($n){return 'Rp '.number_format($n,0,',','.');}
 ?>

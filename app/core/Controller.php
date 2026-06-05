@@ -1,5 +1,4 @@
 <?php
-// app/core/Controller.php — Base Controller
 class Controller
 {
     protected Database $db;

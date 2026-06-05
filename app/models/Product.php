@@ -1,9 +1,8 @@
 <?php
-// app/models/Product.php
 // CRUD menggunakan Stored Procedure (PDD requirement)
 class Product extends Model
 {
-    // ── Stored Procedures ─────────────────────────────────────
+    // Stored Procedures 
 
     /** sp_select_produk: 0 = semua, >0 = by ID */
     public function getAllViaSP(): array
@@ -45,9 +44,9 @@ class Product extends Model
         return true;
     }
 
-    // ── Customer Queries (LEFT JOIN untuk produk + review) ───
+    // Customer Queries (LEFT JOIN untuk produk + review)
 
-    /** Semua produk aktif dengan rating rata-rata (LEFT JOIN) */
+    // Semua produk aktif dengan rating rata-rata (LEFT JOIN)
     public function getActiveWithRating(int $categoryId = 0, string $search = '', string $sort = 'newest'): array
     {
         $sortMap = [
@@ -90,6 +89,7 @@ class Product extends Model
 
     /** Detail produk by slug dengan review (LEFT JOIN) */
     public function findBySlugWithReviews(string $slug): ?array
+<<<<<<< HEAD
     {
         $product = $this->db->queryOne(
         "SELECT p.*, c.name AS category_name,
@@ -100,21 +100,45 @@ class Product extends Model
         LEFT JOIN reviews r    ON p.id = r.product_id AND r.is_approved = 1
         WHERE p.slug = ? AND p.is_active = 1
         GROUP BY p.id",
+=======
+{
+    $product = $this->db->queryOne(
+        "SELECT p.*, 
+                c.name AS category_name,
+                COALESCE(AVG(r.rating), 0) AS avg_rating,
+                COUNT(DISTINCT r.id) AS review_count
+         FROM products p
+         LEFT JOIN categories c 
+                ON p.category_id = c.id
+         LEFT JOIN reviews r 
+                ON p.id = r.product_id 
+               AND r.is_approved = 1
+         WHERE p.slug = ?
+           AND p.is_active = 1
+         GROUP BY p.id",
+>>>>>>> 40536b1d3c1702f09189c65c2f90dda456b5f408
         [$slug]
     );
 
-        if ($product) {
-            $product['reviews'] = $this->db->query(
-                "SELECT r.*, u.name AS reviewer_name, u.avatar
-                 FROM reviews r
-                 INNER JOIN users u ON r.user_id = u.id
-                 WHERE r.product_id = ? AND r.is_approved = 1
-                 ORDER BY r.created_at DESC",
-                [(int)$product['id']]
-            );
-        }
-        return $product;
+    if (!$product) {
+        return null;
     }
+
+    $product['reviews'] = $this->db->query(
+        "SELECT r.*, 
+                u.name AS reviewer_name,
+                u.avatar
+         FROM reviews r
+         INNER JOIN users u 
+                 ON r.user_id = u.id
+         WHERE r.product_id = ?
+           AND r.is_approved = 1
+         ORDER BY r.created_at DESC",
+        [(int)$product['id']]
+    );
+
+    return $product;
+}
 
     public function getFeatured(int $limit = 8): array
     {
