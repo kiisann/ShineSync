@@ -116,7 +116,12 @@ try {
             },
 
             // Reports
+            // Reports
             'reports' => (new ReportController())->index(),
+
+            // Backup Database
+            'backup' => require ROOT_PATH . '/backup.php',
+            'backup-list' => require ROOT_PATH . '/backup_list.php',
 
             default => (new DashboardController())->index()
         };
