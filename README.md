@@ -46,7 +46,10 @@ ShineSyncNew/
 ├── index.php              ← Front Controller & Router
 ├── .htaccess              ← URL Rewriting
 ├── database/
-│   └── shinesync_db.sql   ← Import ke phpMyAdmin
+│   ├── shinesync_db.sql          ← Import utama ke phpMyAdmin
+│   └── trigger_fragmentasi.sql   ← Trigger sinkronisasi fragmentasi
+├── backup/
+│   └── mysqlbackup.bat    ← Script backup otomatis (Task Scheduler)
 ├── config/
 │   └── database.php       ← Konfigurasi DB
 ├── app/
@@ -80,9 +83,9 @@ ShineSyncNew/
 **INNER JOIN** — Detail pesanan, laporan penjualan:
 ```sql
 FROM orders o
-INNER JOIN users u         ON o.user_id   = u.id
-INNER JOIN order_details od ON o.id       = od.order_id
-INNER JOIN products p      ON od.product_id = p.id
+INNER JOIN users u          ON o.user_id    = u.id
+INNER JOIN order_details od ON o.id         = od.order_id
+INNER JOIN products p       ON od.product_id = p.id
 ```
 **LEFT JOIN** — Produk dengan review (produk tanpa review tetap tampil):
 ```sql
@@ -92,15 +95,15 @@ LEFT JOIN reviews r    ON p.id = r.product_id
 ```
 
 ### 3. SET OPERATIONS ✅
-**File:** `app/models/Report.php`, **Tampil di:** `/admin/reports`
+**File:** `app/models/Report.php` &nbsp;|&nbsp; **Tampil di:** `/admin/reports`
 
 **UNION** (hapus duplikat):
 ```sql
-SELECT id, name, email, 'Pembeli' FROM users INNER JOIN orders ...
+SELECT id, name, email, 'Pembeli'  FROM users INNER JOIN orders  ...
 UNION
 SELECT id, name, email, 'Reviewer' FROM users INNER JOIN reviews ...
 ```
-**UNION ALL** (pertahankan semua):
+**UNION ALL** (pertahankan semua baris):
 ```sql
 SELECT ... FROM products WHERE category = 'cincin'
 UNION ALL
@@ -112,7 +115,7 @@ SELECT ... FROM products WHERE category = 'kalung'
 ```php
 $this->db->beginTransaction();  // START TRANSACTION
   // 1. INSERT orders
-  // 2. INSERT order_details (trigger auto kurangi stok)
+  // 2. INSERT order_details  → trigger auto kurangi stok
   // 3. INSERT payments
   // 4. DELETE cart
 $this->db->commit();            // COMMIT
@@ -121,35 +124,81 @@ $this->db->rollback();          // ROLLBACK jika error
 ```
 
 ### 5. FUNCTION ✅
-**Built-in:** `SUM()`, `COUNT()`, `AVG()`, `DATE_FORMAT()` di dashboard/laporan
+**Built-in:** `SUM()`, `COUNT()`, `AVG()`, `DATE_FORMAT()` — digunakan di dashboard & laporan
 
-**Custom MySQL Function:**
+**Custom MySQL Function** — **File:** `database/shinesync_db.sql`
 ```sql
-HitungDiskonMember(total)    -- Diskon 10% jika total >= Rp 1.000.000
-HitungPoinLoyalitas(total)   -- 1 poin per Rp 10.000
+HitungDiskonMember(total)   -- Diskon 10% jika total >= Rp 1.000.000
+HitungPoinLoyalitas(total)  -- 1 poin per Rp 10.000
 ```
 
 ### 6. STORED PROCEDURE ✅
-**File:** `app/controllers/ProductController.php`
-```php
-CALL sp_insert_produk(...)  // Tambah produk
-CALL sp_select_produk(0)    // Ambil semua produk
-CALL sp_select_produk(id)   // Ambil produk by ID
-CALL sp_update_produk(...)  // Update produk
-CALL sp_delete_produk(id)   // Hapus produk (soft delete)
+**File:** `app/controllers/ProductController.php` &nbsp;|&nbsp; **Definisi:** `database/shinesync_db.sql`
+```sql
+CALL sp_insert_produk(...)  -- Tambah produk baru
+CALL sp_select_produk(0)    -- Ambil semua produk
+CALL sp_select_produk(id)   -- Ambil produk by ID
+CALL sp_update_produk(...)  -- Update produk
+CALL sp_delete_produk(id)   -- Hapus produk (soft delete)
 ```
 
 ### 7. TRIGGER ✅
-**File:** `database/shinesync_db.sql`
+**File:** `database/shinesync_db.sql`, `database/trigger_fragmentasi.sql`
+
+| Nama Trigger | Event | Tabel | Fungsi |
+|---|---|---|---|
+| `tr_kurangi_stok` | `AFTER INSERT` | `order_details` | Kurangi stok produk otomatis saat item order masuk |
+| `tr_update_total_order` | `AFTER INSERT` | `order_details` | Recalculate `total_amount` di tabel `orders` |
+| `tr_auto_order_status` | `AFTER UPDATE` | `payments` | Ubah status order ke `processing` saat pembayaran diverifikasi |
+| `tr_log_review` | `AFTER INSERT` | `reviews` | Catat aktivitas review customer ke `activity_logs` |
+| `tr_frag_order_insert` | `AFTER INSERT` | `orders` | Masukkan order baru ke tabel fragmentasi yang sesuai |
+| `tr_frag_order_update` | `AFTER UPDATE` | `orders` | Pindahkan data antar tabel fragmentasi saat status order berubah |
+
 ```sql
-CREATE TRIGGER tr_kurangi_stok
-AFTER INSERT ON order_details
-FOR EACH ROW
+-- Contoh: tr_frag_order_update (sinkronisasi fragmentasi horizontal)
+CREATE TRIGGER tr_frag_order_update
+AFTER UPDATE ON orders FOR EACH ROW
 BEGIN
-    UPDATE products SET stock = stock - NEW.quantity WHERE id = NEW.product_id;
+    IF NEW.status <> OLD.status THEN
+        -- Hapus dari tabel fragmentasi lama
+        DELETE FROM orders_pending     WHERE id = OLD.id;
+        -- Insert ke tabel fragmentasi baru sesuai status
+        INSERT INTO orders_processing (...) VALUES (NEW.id, ...);
+    END IF;
 END
 ```
-Trigger otomatis berjalan setiap kali INSERT ke `order_details`.
+
+### 8. FRAGMENTASI ✅
+**File:** `database/shinesync_db.sql`, `database/trigger_fragmentasi.sql`
+
+**Fragmentasi Horizontal** — Tabel `orders` dipecah berdasarkan status pesanan:
+```sql
+orders_pending     -- status = 'pending'
+orders_processing  -- status IN ('confirmed', 'processing', 'shipped')
+orders_completed   -- status = 'delivered'
+orders_cancelled   -- status = 'cancelled'
+```
+Data di tabel fragmentasi diisi dan disinkronisasi **secara otomatis** oleh trigger `tr_frag_order_insert` dan `tr_frag_order_update`.
+
+**Fragmentasi Vertikal** — Tabel `products` dipecah berdasarkan kelompok kolom:
+```sql
+products_info    -- id, name, slug, category_id, is_active, created_at
+products_pricing -- id, price, stock, weight
+products_detail  -- id, description, updated_at
+```
+Kolom yang sering diakses saat listing produk dipisahkan dari kolom detail dan harga untuk efisiensi query.
+
+### 9. BACKUP DATABASE ✅
+**File:** `backup/mysqlbackup.bat`
+
+Script backup otomatis menggunakan `mysqldump` yang dijadwalkan via **Windows Task Scheduler**:
+```bat
+set "dbName=shinesync_db"
+"%mysqlDir%\mysqldump" -u adm_backup -ppassword %dbName% > "%backupDir%\backup_%timestamp%.sql"
+```
+- Backup berjalan **otomatis setiap hari** sesuai jadwal Task Scheduler
+- File backup diberi nama dengan **timestamp** otomatis, contoh: `backup_2026-06-05_08-00.sql`
+- Disimpan di folder `D:\Backup`
 
 ---
 
@@ -159,7 +208,7 @@ Trigger otomatis berjalan setiap kali INSERT ke `order_details`.
 |-------|-----------|
 | Frontend | HTML5, CSS3, Bootstrap 5, JavaScript |
 | Backend | PHP Native (MVC) |
-| Database | MySQL/MariaDB |
+| Database | MySQL 8.0 |
 | Web Server | Apache (Laragon) |
 | DB Access | mysqli |
 | Auth | PHP Session + password_hash |
@@ -183,10 +232,10 @@ Trigger otomatis berjalan setiap kali INSERT ke `order_details`.
 | `/auth/register` | Registrasi |
 | `/admin/login` | Login admin |
 | `/admin/dashboard` | Dashboard admin |
-| `/admin/products` | Kelola produk (SP) |
+| `/admin/products` | Kelola produk (Stored Procedure) |
 | `/admin/categories` | Kelola kategori |
-| `/admin/orders` | Kelola pesanan |
-| `/admin/payments` | Verifikasi pembayaran |
+| `/admin/orders` | Kelola pesanan (Trigger fragmentasi) |
+| `/admin/payments` | Verifikasi pembayaran (Trigger auto status) |
 | `/admin/customers` | Data customer |
-| `/admin/reviews` | Kelola review |
-| `/admin/reports` | **Laporan PDD** (VIEW + JOIN + UNION) |
+| `/admin/reviews` | Kelola review (Trigger log) |
+| `/admin/reports` | Laporan PDD (VIEW + JOIN + UNION + Fragmentasi) |
