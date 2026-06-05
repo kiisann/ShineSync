@@ -278,6 +278,7 @@ h6 {
   align-items: center;
   position: relative;
   overflow: hidden;
+  padding: 40px 0px;
 }
 
 .hero-section::before {

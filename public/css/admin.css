@@ -523,6 +523,7 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); -web
 
 .low-stock-card {
     border-left: 4px solid #ef4444;
+    margin-bottom: 20px;
 }
 
 .low-stock-icon {
