@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Default avatar</title>
+  <desc id="desc">A default user avatar for ShineSync.</desc>
+  <rect width="256" height="256" rx="128" fill="#f7f3ea"/>
+  <circle cx="128" cy="96" r="42" fill="#d4af37"/>
+  <path d="M54 216c13-43 49-70 74-70s61 27 74 70" fill="#1a1a1a"/>
+  <path d="M89 45h58l-14-22h-30z" fill="#f6e7ad" stroke="#d4af37" stroke-width="6" stroke-linejoin="round"/>
+</svg>
