@@ -95,6 +95,31 @@ class Order extends Model
              ORDER BY o.created_at DESC"
         );
     }
+    public function getAktif(): array
+    {
+        return $this->db->query(
+            "SELECT oa.*, u.name AS customer_name, u.email,
+                    p.status AS payment_status,
+                    (SELECT COUNT(*) FROM order_details od WHERE od.order_id = oa.id) AS item_count
+            FROM orders_aktif oa
+            INNER JOIN users u ON oa.user_id = u.id
+            LEFT JOIN payments p ON oa.id = p.order_id
+            ORDER BY oa.created_at DESC"
+        );
+    }
+
+    public function getArsip(): array
+    {
+        return $this->db->query(
+            "SELECT oas.*, u.name AS customer_name, u.email,
+                    p.status AS payment_status,
+                    (SELECT COUNT(*) FROM order_details od WHERE od.order_id = oas.id) AS item_count
+            FROM orders_arsip oas
+            INNER JOIN users u ON oas.user_id = u.id
+            LEFT JOIN payments p ON oas.id = p.order_id
+            ORDER BY oas.created_at DESC"
+        );
+    }
 
     public function updateStatus(int $id, string $status): bool
     {

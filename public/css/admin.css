@@ -437,3 +437,86 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); -web
     text-align: center;
   }
 }
+
+/* ── Order Tabs ─────────────────────────────────────────────── */
+.order-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e0d9c8;
+}
+
+.order-tab {
+  padding: 10px 22px;
+  font-weight: 600;
+  font-size: .88rem;
+  border-radius: 8px 8px 0 0;
+  text-decoration: none;
+  color: #666;
+  background: #f5f0e8;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: background .15s, color .15s;
+}
+
+.order-tab:hover {
+  background: #ede8da;
+  color: #444;
+}
+
+.order-tab.active {
+  background: #D4AF37;
+  color: #fff;
+  border-bottom-color: #D4AF37;
+}
+
+/* ── Order Status Badge (colored pill) ──────────────────────── */
+.order-status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 600;
+}
+
+.order-status-badge.pending     { background: #f59e0b22; color: #f59e0b; border: 1px solid #f59e0b55; }
+.order-status-badge.confirmed   { background: #3b82f622; color: #3b82f6; border: 1px solid #3b82f655; }
+.order-status-badge.processing  { background: #8b5cf622; color: #8b5cf6; border: 1px solid #8b5cf655; }
+.order-status-badge.shipped     { background: #06b6d422; color: #06b6d4; border: 1px solid #06b6d455; }
+.order-status-badge.delivered   { background: #10b98122; color: #10b981; border: 1px solid #10b98155; }
+.order-status-badge.cancelled   { background: #ef444422; color: #ef4444; border: 1px solid #ef444455; }
+
+/* ── Order tab count badge ──────────────────────────────────── */
+.tab-count {
+  background: #D4AF37;
+  color: #fff;
+  font-size: .75rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-left: 8px;
+}
+
+.tab-count.muted {
+  background: #6b728022;
+  color: #6b7280;
+  border: 1px solid #6b728055;
+}
+
+/* ── Archived rows ──────────────────────────────────────────── */
+.row-arsip {
+  opacity: .85;
+}
+
+/* ── Empty state ────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+.empty-state i {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 10px;
+  opacity: .3;
+}
