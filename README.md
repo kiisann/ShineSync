@@ -71,53 +71,6 @@ Ringkasan pesanan beserta estimasi poin loyalitas yang didapat
 ## 🎖️ Sistem Loyalitas Poin
 Setiap transaksi menghasilkan poin berdasarkan grand total pembelian (Rp 10.000 = 1 poin). Poin ditampilkan secara real-time di halaman checkout sebagai insentif bagi pelanggan.
 
-## 🚦 Routing & Arsitektur MVC
-Semua request masuk melalui index.php (Front Controller), kemudian di-route ke controller yang sesuai menggunakan PHP 8 match expression:
-### Route Customer
-| URL | Controller | Keterangan |
-|---|---|---|
-| `/` | `HomeController::index` | Halaman beranda |
-| `/products` | `ProductController::index` | Daftar produk |
-| `/products/{slug}` | `ProductController::detail` | Detail produk |
-| `/products/search` | `ProductController::search` | Pencarian produk |
-| `/cart` | `CartController::index` | Halaman keranjang |
-| `/cart/add` | `CartController::add` | Tambah ke keranjang |
-| `/checkout` | `CheckoutController::index` | Halaman checkout |
-| `/checkout/process` | `CheckoutController::process` | Proses pesanan |
-| `/orders` | `OrderController::history` | Riwayat pesanan |
-| `/wishlist` | `WishlistController::index` | Wishlist produk |
-| `/reviews/store` | `ReviewController::store` | Kirim ulasan |
-| `/profile` | `ProfileController::index` | Profil pengguna |
-
-### Route Admin
-| URL | Controller | Keterangan |
-|---|---|---|
-| `/admin` | `DashboardController::index` | Dashboard admin |
-| `/admin/products` | `ProductController::adminIndex` | Kelola produk |
-| `/admin/categories` | `CategoryController::adminIndex` | Kelola kategori |
-| `/admin/orders` | `OrderController::adminIndex` | Semua pesanan |
-| `/admin/orders/aktif` | `OrderController::adminAktif` | Order aktif |
-| `/admin/orders/arsip` | `OrderController::adminArsip` | Order arsip |
-| `/admin/payments` | `PaymentController::adminIndex` | Verifikasi pembayaran |
-| `/admin/customers` | `DashboardController::customers` | Data pelanggan |
-| `/admin/reviews` | `ReviewController::adminIndex` | Moderasi ulasan |
-| `/admin/reports` | `ReportController::index` | Laporan penjualan |
-
----
-
-## 🗄️ Model & Relasi Database
-
-| Model | Tabel | Keterangan |
-|---|---|---|
-| `User` | `users` | Data pelanggan & admin |
-| `Product` | `products` | Produk perhiasan |
-| `Category` | `categories` | Kategori produk |
-| `Cart` | `cart_items` | Keranjang belanja |
-| `Order` | `orders`, `order_items` | Pesanan & detail item |
-| `Payment` | `payments` | Bukti pembayaran |
-| `Review` | `reviews` | Ulasan produk |
-| `Wishlist` | `wishlists` | Produk favorit |
-| `Report` | (view/query) | Laporan penjualan |
 
 Relasi produk dengan ulasan menggunakan **LEFT JOIN** untuk menjaga produk tetap tampil meski belum ada ulasan:
 
@@ -139,19 +92,6 @@ public function getActiveWithRating(int $categoryId = 0, string $search = '', st
     );
 }
 ```
-
----
-
-## 🔐 Autentikasi & Otorisasi
-
-Sistem menggunakan `Session` class kustom dengan dua level akses:
-
-- **Customer** — Akses ke halaman belanja, riwayat pesanan, profil, wishlist, dan ulasan
-- **Admin** — Akses penuh ke panel admin (produk, kategori, pesanan, pembayaran, ulasan, laporan)
-
-Route admin dilindungi dengan `Session::requireAdmin()` yang otomatis redirect ke halaman login jika belum autentikasi.
-
----
 
 ## 💳 Alur Pembayaran
 
