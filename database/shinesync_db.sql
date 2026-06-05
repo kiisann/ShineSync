@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 05, 2026 at 12:10 PM
+-- Generation Time: Jun 05, 2026 at 12:13 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.26
 
@@ -98,6 +98,16 @@ CREATE TABLE `activity_logs` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `activity_logs`
+--
+
+INSERT INTO `activity_logs` (`id_log`, `id_user`, `aktivitas`, `created_at`) VALUES
+(1, 2, 'Customer memberikan review untuk produk ID 1 pada order ID 1', '2026-06-05 10:30:38'),
+(2, 3, 'Customer memberikan review untuk produk ID 2 pada order ID 2', '2026-06-05 10:30:38'),
+(3, 4, 'Customer memberikan review untuk produk ID 4 pada order ID 3', '2026-06-05 10:30:38'),
+(4, 2, 'Customer memberikan review untuk produk ID 5 pada order ID 4', '2026-06-05 10:30:38');
+
 -- --------------------------------------------------------
 
 --
@@ -110,6 +120,13 @@ CREATE TABLE `carts` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `carts`
+--
+
+INSERT INTO `carts` (`id`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 6, '2026-06-05 11:01:00', '2026-06-05 11:01:00');
 
 -- --------------------------------------------------------
 
@@ -125,6 +142,14 @@ CREATE TABLE `cart_details` (
   `price` decimal(15,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cart_details`
+--
+
+INSERT INTO `cart_details` (`id`, `cart_id`, `product_id`, `quantity`, `price`, `created_at`) VALUES
+(1, 1, 1, 1, '4500000.00', '2026-06-05 11:01:00'),
+(2, 1, 2, 1, '2800000.00', '2026-06-05 11:01:02');
 
 -- --------------------------------------------------------
 
@@ -147,11 +172,11 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `image`, `is_active`, `created_at`) VALUES
-(1, 'Cincin', 'cincin', 'Koleksi cincin mewah dari emas, perak, dan platinum', NULL, 1, '2026-06-05 10:50:34'),
-(3, 'Kalung', 'kalung', 'Kalung elegan untuk berbagai kesempatan', NULL, 1, '2026-06-05 10:50:34'),
-(5, 'Gelang', 'gelang', 'Gelang cantik untuk melengkapi penampilan', NULL, 1, '2026-06-05 10:50:34'),
-(7, 'Anting', 'anting', 'Anting eksklusif dengan desain modern', NULL, 1, '2026-06-05 10:50:34'),
-(9, 'Aksesoris', 'aksesoris', 'Aksesoris perhiasan lainnya', NULL, 1, '2026-06-05 10:50:34');
+(1, 'Cincin', 'cincin', 'Koleksi cincin mewah dari emas, perak, dan platinum', NULL, 1, '2026-06-05 10:30:37'),
+(2, 'Kalung', 'kalung', 'Kalung elegan untuk berbagai kesempatan', NULL, 1, '2026-06-05 10:30:37'),
+(3, 'Gelang', 'gelang', 'Gelang cantik untuk melengkapi penampilan', NULL, 1, '2026-06-05 10:30:37'),
+(4, 'Anting', 'anting', 'Anting eksklusif dengan desain modern', NULL, 1, '2026-06-05 10:30:37'),
+(5, 'Aksesoris', 'aksesoris', 'Aksesoris perhiasan lainnya', NULL, 1, '2026-06-05 10:30:37');
 
 -- --------------------------------------------------------
 
@@ -175,6 +200,18 @@ CREATE TABLE `orders` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `order_number`, `total_amount`, `discount`, `grand_total`, `loyalty_points`, `shipping_name`, `shipping_phone`, `shipping_address`, `notes`, `status`, `created_at`, `updated_at`) VALUES
+(1, 2, 'SS-2025-0001', '4500000.00', '450000.00', '4050000.00', 405, 'Siti Rahayu', '081298765432', 'Jl. Merdeka No. 12, Bandung', NULL, 'delivered', '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(2, 3, 'SS-2025-0002', '2800000.00', '0.00', '2800000.00', 280, 'Budi Santoso', '085611223344', 'Jl. Sudirman No. 45, Surabaya', NULL, 'delivered', '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(3, 4, 'SS-2025-0003', '6800000.00', '680000.00', '6120000.00', 612, 'Dewi Lestari', '087733445566', 'Jl. Diponegoro No. 8, Yogyakarta', NULL, 'processing', '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(4, 2, 'SS-2025-0004', '1850000.00', '0.00', '1850000.00', 185, 'Siti Rahayu', '081298765432', 'Jl. Merdeka No. 12, Bandung', NULL, 'delivered', '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(5, 5, 'SS-2025-0005', '8500000.00', '850000.00', '7650000.00', 765, 'Rina Anjani', '082255667788', 'Jl. Ahmad Yani No. 20, Medan', NULL, 'shipped', '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(6, 3, 'SS-2025-0006', '350000.00', '0.00', '350000.00', 35, 'Budi Santoso', '085611223344', 'Jl. Sudirman No. 45, Surabaya', NULL, 'pending', '2026-06-05 10:30:37', '2026-06-05 10:30:37');
 
 --
 -- Triggers `orders`
@@ -293,10 +330,10 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders_cancelled`
+-- Table structure for table `orders_aktif`
 --
 
-CREATE TABLE `orders_cancelled` (
+CREATE TABLE `orders_aktif` (
   `id` int UNSIGNED NOT NULL DEFAULT '0',
   `user_id` int UNSIGNED NOT NULL,
   `order_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -312,14 +349,23 @@ CREATE TABLE `orders_cancelled` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders_aktif`
+--
+
+INSERT INTO `orders_aktif` (`id`, `user_id`, `order_number`, `total_amount`, `discount`, `grand_total`, `loyalty_points`, `shipping_name`, `shipping_phone`, `shipping_address`, `notes`, `status`, `created_at`, `updated_at`) VALUES
+(6, 3, 'SS-2025-0006', '350000.00', '0.00', '350000.00', 35, 'Budi Santoso', '085611223344', 'Jl. Sudirman No. 45, Surabaya', NULL, 'pending', '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(3, 4, 'SS-2025-0003', '6800000.00', '680000.00', '6120000.00', 612, 'Dewi Lestari', '087733445566', 'Jl. Diponegoro No. 8, Yogyakarta', NULL, 'processing', '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(5, 5, 'SS-2025-0005', '8500000.00', '850000.00', '7650000.00', 765, 'Rina Anjani', '082255667788', 'Jl. Ahmad Yani No. 20, Medan', NULL, 'shipped', '2026-06-05 10:30:37', '2026-06-05 10:30:37');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders_completed`
+-- Table structure for table `orders_arsip`
 --
 
-CREATE TABLE `orders_completed` (
+CREATE TABLE `orders_arsip` (
   `id` int UNSIGNED NOT NULL DEFAULT '0',
   `user_id` int UNSIGNED NOT NULL,
   `order_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -336,51 +382,14 @@ CREATE TABLE `orders_completed` (
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `orders_pending`
+-- Dumping data for table `orders_arsip`
 --
 
-CREATE TABLE `orders_pending` (
-  `id` int UNSIGNED NOT NULL DEFAULT '0',
-  `user_id` int UNSIGNED NOT NULL,
-  `order_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `discount` decimal(15,2) DEFAULT '0.00',
-  `grand_total` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `loyalty_points` int DEFAULT '0',
-  `shipping_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `shipping_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `shipping_address` text COLLATE utf8mb4_unicode_ci,
-  `notes` text COLLATE utf8mb4_unicode_ci,
-  `status` enum('pending','confirmed','processing','shipped','delivered','cancelled') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `orders_processing`
---
-
-CREATE TABLE `orders_processing` (
-  `id` int UNSIGNED NOT NULL DEFAULT '0',
-  `user_id` int UNSIGNED NOT NULL,
-  `order_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_amount` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `discount` decimal(15,2) DEFAULT '0.00',
-  `grand_total` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `loyalty_points` int DEFAULT '0',
-  `shipping_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `shipping_phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `shipping_address` text COLLATE utf8mb4_unicode_ci,
-  `notes` text COLLATE utf8mb4_unicode_ci,
-  `status` enum('pending','confirmed','processing','shipped','delivered','cancelled') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO `orders_arsip` (`id`, `user_id`, `order_number`, `total_amount`, `discount`, `grand_total`, `loyalty_points`, `shipping_name`, `shipping_phone`, `shipping_address`, `notes`, `status`, `created_at`, `updated_at`) VALUES
+(1, 2, 'SS-2025-0001', '4500000.00', '450000.00', '4050000.00', 405, 'Siti Rahayu', '081298765432', 'Jl. Merdeka No. 12, Bandung', NULL, 'delivered', '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(2, 3, 'SS-2025-0002', '2800000.00', '0.00', '2800000.00', 280, 'Budi Santoso', '085611223344', 'Jl. Sudirman No. 45, Surabaya', NULL, 'delivered', '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(4, 2, 'SS-2025-0004', '1850000.00', '0.00', '1850000.00', 185, 'Siti Rahayu', '081298765432', 'Jl. Merdeka No. 12, Bandung', NULL, 'delivered', '2026-06-05 10:30:37', '2026-06-05 10:30:37');
 
 -- --------------------------------------------------------
 
@@ -397,6 +406,18 @@ CREATE TABLE `order_details` (
   `price` decimal(15,2) NOT NULL,
   `subtotal` decimal(15,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `product_name`, `quantity`, `price`, `subtotal`) VALUES
+(1, 1, 1, 'Cincin Diamond Solitaire 18K', 1, '4500000.00', '4500000.00'),
+(2, 2, 2, 'Cincin Rose Gold Couple', 1, '2800000.00', '2800000.00'),
+(3, 3, 4, 'Kalung Berlian Choker', 1, '6800000.00', '6800000.00'),
+(4, 4, 5, 'Kalung Liontin Hati Gold', 1, '1850000.00', '1850000.00'),
+(5, 5, 8, 'Gelang Berlian Tennis', 1, '8500000.00', '8500000.00'),
+(6, 6, 3, 'Cincin Perak Minimalis', 1, '350000.00', '350000.00');
 
 --
 -- Triggers `order_details`
@@ -444,6 +465,18 @@ CREATE TABLE `payments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`id`, `order_id`, `amount`, `method`, `bank_name`, `account_number`, `proof_image`, `status`, `verified_at`, `verified_by`, `notes`, `created_at`) VALUES
+(1, 1, '4050000.00', 'transfer', 'BCA', '1234567890', 'proof_001.jpg', 'verified', '2025-01-15 03:30:00', 1, NULL, '2026-06-05 10:30:38'),
+(2, 2, '2800000.00', 'transfer', 'Mandiri', '0987654321', 'proof_002.jpg', 'verified', '2025-01-18 07:20:00', 1, NULL, '2026-06-05 10:30:38'),
+(3, 3, '6120000.00', 'qris', NULL, NULL, 'proof_003.jpg', 'verified', '2025-02-01 02:15:00', 1, NULL, '2026-06-05 10:30:38'),
+(4, 4, '1850000.00', 'transfer', 'BNI', '1122334455', 'proof_004.jpg', 'verified', '2025-02-10 09:45:00', 1, NULL, '2026-06-05 10:30:38'),
+(5, 5, '7650000.00', 'transfer', 'BCA', '5566778899', 'proof_005.jpg', 'pending', NULL, NULL, NULL, '2026-06-05 10:30:38'),
+(6, 6, '350000.00', 'transfer', 'BRI', '9988776655', NULL, 'pending', NULL, NULL, NULL, '2026-06-05 10:30:38');
+
+--
 -- Triggers `payments`
 --
 DELIMITER $$
@@ -487,68 +520,20 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `description`, `price`, `stock`, `weight`, `material`, `image`, `is_featured`, `is_active`, `created_at`, `updated_at`) VALUES
-(9, 9, 'Cincin Diamond', 'cincin-diamond', 'jsandxhkabsdhchahndxuwnquewh', '25000000.00', 50, '50.00', 'Emas 15k', '6a22ae893e673.jpg', 0, 1, '2026-06-05 11:07:54', '2026-06-05 11:10:01');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `products_detail`
---
-
-CREATE TABLE `products_detail` (
-  `id` int UNSIGNED NOT NULL DEFAULT '0',
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `products_detail`
---
-
-INSERT INTO `products_detail` (`id`, `description`, `updated_at`) VALUES
-(9, 'jsandxhkabsdhchahndxuwnquewh', '2026-06-05 11:10:01');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `products_info`
---
-
-CREATE TABLE `products_info` (
-  `id` int UNSIGNED NOT NULL DEFAULT '0',
-  `name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(220) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category_id` int UNSIGNED NOT NULL,
-  `is_active` tinyint(1) DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `products_info`
---
-
-INSERT INTO `products_info` (`id`, `name`, `slug`, `category_id`, `is_active`, `created_at`) VALUES
-(9, 'Cincin Diamond', 'cincin-diamond', 9, 1, '2026-06-05 11:07:54');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `products_pricing`
---
-
-CREATE TABLE `products_pricing` (
-  `id` int UNSIGNED NOT NULL DEFAULT '0',
-  `price` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `stock` int NOT NULL DEFAULT '0',
-  `weight` decimal(8,2) DEFAULT '0.00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `products_pricing`
---
-
-INSERT INTO `products_pricing` (`id`, `price`, `stock`, `weight`) VALUES
-(9, '25000000.00', 50, '50.00');
+(1, 1, 'Cincin Diamond Solitaire 18K', 'cincin-diamond-solitaire-18k', 'Cincin elegan berlapis emas 18 karat dengan berlian asli. Cocok untuk lamaran dan pernikahan.', '4500000.00', 15, '5.20', 'Emas 18K + Berlian', 'cincin-diamond.jpg', 1, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:38'),
+(2, 1, 'Cincin Rose Gold Couple', 'cincin-rose-gold-couple', 'Pasangan cincin rose gold yang romantis. Tersedia dalam berbagai ukuran.', '2800000.00', 20, '4.80', 'Rose Gold 14K', 'cincin-rosegold.jpg', 1, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:38'),
+(3, 1, 'Cincin Perak Minimalis', 'cincin-perak-minimalis', 'Cincin perak sterling dengan desain minimalis modern. Sempurna untuk sehari-hari.', '350000.00', 50, '3.50', 'Perak 925', 'cincin-perak.jpg', 0, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:38'),
+(4, 2, 'Kalung Berlian Choker', 'kalung-berlian-choker', 'Kalung choker mewah dengan berlian berkilau. Tampil glamor di setiap kesempatan.', '6800000.00', 8, '12.50', 'Emas 18K + Berlian', 'kalung-choker.jpg', 1, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:38'),
+(5, 2, 'Kalung Liontin Hati Gold', 'kalung-liontin-hati-gold', 'Kalung dengan liontin berbentuk hati dari emas kuning. Hadiah sempurna untuk orang terkasih.', '1850000.00', 25, '8.20', 'Emas 14K', 'kalung-hati.jpg', 1, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:38'),
+(6, 2, 'Kalung Pearl Clasic', 'kalung-pearl-classic', 'Kalung mutiara klasik yang timeless. Cocok untuk acara formal maupun kasual.', '1200000.00', 30, '15.00', 'Mutiara Asli + Emas Putih', 'kalung-mutiara.jpg', 0, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(7, 3, 'Gelang Charm Gold', 'gelang-charm-gold', 'Gelang emas dengan berbagai charm lucu. Dapat disesuaikan dengan gaya Anda.', '2200000.00', 18, '6.80', 'Emas 14K', 'gelang-charm.jpg', 1, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(8, 3, 'Gelang Berlian Tennis', 'gelang-berlian-tennis', 'Gelang tennis mewah dengan deretan berlian. Tampilan premium dan elegan.', '8500000.00', 5, '9.50', 'Emas 18K + Berlian', 'gelang-tennis.jpg', 1, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:38'),
+(9, 3, 'Gelang Silver Adjustable', 'gelang-silver-adjustable', 'Gelang perak yang dapat disesuaikan ukurannya. Desain simpel dan modern.', '280000.00', 60, '4.20', 'Perak 925', 'gelang-silver.jpg', 0, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(10, 4, 'Anting Diamond Drop', 'anting-diamond-drop', 'Anting mewah dengan berlian bergelantungan. Sempurna untuk acara spesial.', '3600000.00', 12, '3.80', 'Emas 18K + Berlian', 'anting-diamond.jpg', 1, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(11, 4, 'Anting Mutiara Klasik', 'anting-mutiara-klasik', 'Anting mutiara klasik yang tidak pernah ketinggalan zaman.', '950000.00', 35, '2.90', 'Mutiara + Emas Putih', 'anting-mutiara.jpg', 0, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(12, 4, 'Anting Hoop Gold', 'anting-hoop-gold', 'Anting hoop emas yang trendy. Tersedia dalam ukuran S, M, L.', '1100000.00', 40, '3.20', 'Emas 14K', 'anting-hoop.jpg', 0, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(13, 5, 'Brosco Bunga Emas', 'brosco-bunga-emas', 'Bros cantik berbentuk bunga dari emas. Aksesori sempurna untuk hijab maupun baju.', '750000.00', 22, '7.50', 'Emas 14K', 'bros-bunga.jpg', 0, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(14, 5, 'Jepit Rambut Crystal', 'jepit-rambut-crystal', 'Jepit rambut mewah dihiasi kristal Swarovski. Tampil elegan di setiap acara.', '420000.00', 45, '2.50', 'Stainless + Crystal', 'jepit-crystal.jpg', 0, 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37');
 
 -- --------------------------------------------------------
 
@@ -580,6 +565,16 @@ CREATE TABLE `reviews` (
   `is_approved` tinyint(1) DEFAULT '1',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `user_id`, `product_id`, `order_id`, `rating`, `comment`, `is_approved`, `created_at`) VALUES
+(1, 2, 1, 1, 5, 'Cincin yang sangat cantik! Berkualitas tinggi dan sesuai ekspektasi. Pengiriman cepat. Sangat recommended!', 1, '2026-06-05 10:30:38'),
+(2, 3, 2, 2, 4, 'Kualitas bagus, rose gold-nya cantik. Sedikit lebih kecil dari ekspektasi tapi overall memuaskan.', 1, '2026-06-05 10:30:38'),
+(3, 4, 4, 3, 5, 'Kalung berliannya luar biasa! Kilauannya sangat indah. Worth every penny!', 1, '2026-06-05 10:30:38'),
+(4, 2, 5, 4, 5, 'Kalung liontin hatinya sangat cantik, saya sangat suka! Akan beli lagi.', 1, '2026-06-05 10:30:38');
 
 --
 -- Triggers `reviews`
@@ -620,12 +615,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `avatar`, `role`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'Administrator', 'admin@shinesync.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '081234567890', 'Jakarta Pusat', 'default.png', 'admin', 1, '2026-06-05 10:50:34', '2026-06-05 10:50:34'),
-(3, 'Siti Rahayu', 'siti@example.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '081298765432', 'Jl. Merdeka No. 12, Bandung', 'default.png', 'customer', 1, '2026-06-05 10:50:34', '2026-06-05 10:50:34'),
-(5, 'Budi Santoso', 'budi@example.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '085611223344', 'Jl. Sudirman No. 45, Surabaya', 'default.png', 'customer', 1, '2026-06-05 10:50:34', '2026-06-05 10:50:34'),
-(7, 'Dewi Lestari', 'dewi@example.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '087733445566', 'Jl. Diponegoro No. 8, Yogyakarta', 'default.png', 'customer', 1, '2026-06-05 10:50:34', '2026-06-05 10:50:34'),
-(9, 'Rina Anjani', 'rina@example.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '082255667788', 'Jl. Ahmad Yani No. 20, Medan', 'default.png', 'customer', 1, '2026-06-05 10:50:34', '2026-06-05 10:50:34'),
-(11, 'Achira Desya Lucy', 'achiralucy@gmail.com', '$2y$10$R0B3YnIKceYH.VCTzP6/jOhqPvbDxnclDnz.6nn8xIvn6SEP3uwRS', '0812345678978', '', 'default.png', 'customer', 1, '2026-06-05 11:01:11', '2026-06-05 11:01:11');
+(1, 'Administrator', 'admin@shinesync.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '081234567890', 'Jakarta Pusat', 'default.png', 'admin', 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(2, 'Siti Rahayu', 'siti@example.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '081298765432', 'Jl. Merdeka No. 12, Bandung', 'default.png', 'customer', 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(3, 'Budi Santoso', 'budi@example.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '085611223344', 'Jl. Sudirman No. 45, Surabaya', 'default.png', 'customer', 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(4, 'Dewi Lestari', 'dewi@example.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '087733445566', 'Jl. Diponegoro No. 8, Yogyakarta', 'default.png', 'customer', 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(5, 'Rina Anjani', 'rina@example.com', '$2y$10$onlJ0nnbND1b/xNoiIAAI.JDhPkJmaP.lzMf8TSpML/V/ne744Wcu', '082255667788', 'Jl. Ahmad Yani No. 20, Medan', 'default.png', 'customer', 1, '2026-06-05 10:30:37', '2026-06-05 10:30:37'),
+(6, 'zahra a a', 'zahraayu@gmail.com', '$2y$10$Rnl0sKKg/2k.s6wQvLvhReZFI0q0BiVgHasdDWupTj9FvXlmKUx5O', '08123456789', '', 'default.png', 'customer', 1, '2026-06-05 10:38:08', '2026-06-05 10:38:08');
 
 -- --------------------------------------------------------
 
@@ -634,15 +629,15 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `ava
 -- (See below for the actual view)
 --
 CREATE TABLE `view_customer_aktif` (
-`id` int unsigned
-,`name` varchar(100)
+`bergabung` timestamp
 ,`email` varchar(150)
-,`phone` varchar(20)
-,`bergabung` timestamp
+,`id` int unsigned
+,`jumlah_review` bigint
 ,`jumlah_transaksi` bigint
+,`name` varchar(100)
+,`phone` varchar(20)
 ,`total_belanja` decimal(37,2)
 ,`transaksi_terakhir` timestamp
-,`jumlah_review` bigint
 );
 
 -- --------------------------------------------------------
@@ -652,18 +647,18 @@ CREATE TABLE `view_customer_aktif` (
 -- (See below for the actual view)
 --
 CREATE TABLE `view_laporan_penjualan` (
-`id_order` int unsigned
-,`order_number` varchar(50)
-,`nama_customer` varchar(100)
+`discount` decimal(15,2)
 ,`email` varchar(150)
+,`grand_total` decimal(15,2)
+,`id_order` int unsigned
+,`jumlah_item` bigint
+,`metode_pembayaran` enum('transfer','qris','cod')
+,`nama_customer` varchar(100)
+,`order_number` varchar(50)
+,`status_pembayaran` enum('pending','verified','rejected')
+,`status_pesanan` enum('pending','confirmed','processing','shipped','delivered','cancelled')
 ,`tanggal_pesanan` varchar(72)
 ,`total_amount` decimal(15,2)
-,`discount` decimal(15,2)
-,`grand_total` decimal(15,2)
-,`status_pesanan` enum('pending','confirmed','processing','shipped','delivered','cancelled')
-,`status_pembayaran` enum('pending','verified','rejected')
-,`metode_pembayaran` enum('transfer','qris','cod')
-,`jumlah_item` bigint
 );
 
 -- --------------------------------------------------------
@@ -674,15 +669,15 @@ CREATE TABLE `view_laporan_penjualan` (
 --
 CREATE TABLE `view_produk_terlaris` (
 `id` int unsigned
-,`nama_produk` varchar(200)
 ,`image` varchar(255)
-,`kategori` varchar(100)
-,`price` decimal(15,2)
-,`stock` int
-,`total_terjual` decimal(32,0)
-,`total_pendapatan` decimal(37,2)
-,`rata_rating` decimal(7,4)
 ,`jumlah_review` bigint
+,`kategori` varchar(100)
+,`nama_produk` varchar(200)
+,`price` decimal(15,2)
+,`rata_rating` decimal(7,4)
+,`stock` int
+,`total_pendapatan` decimal(37,2)
+,`total_terjual` decimal(32,0)
 );
 
 -- --------------------------------------------------------
@@ -697,6 +692,22 @@ CREATE TABLE `wishlist` (
   `product_id` int UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `wishlist`
+--
+
+INSERT INTO `wishlist` (`id`, `user_id`, `product_id`, `created_at`) VALUES
+(1, 2, 7, '2026-06-05 10:30:38'),
+(2, 2, 8, '2026-06-05 10:30:38'),
+(3, 2, 10, '2026-06-05 10:30:38'),
+(4, 3, 4, '2026-06-05 10:30:38'),
+(5, 3, 5, '2026-06-05 10:30:38'),
+(6, 3, 11, '2026-06-05 10:30:38'),
+(7, 4, 1, '2026-06-05 10:30:38'),
+(8, 4, 8, '2026-06-05 10:30:38'),
+(9, 5, 2, '2026-06-05 10:30:38'),
+(10, 5, 6, '2026-06-05 10:30:38');
 
 -- --------------------------------------------------------
 
@@ -841,49 +852,49 @@ ALTER TABLE `wishlist`
 -- AUTO_INCREMENT for table `activity_logs`
 --
 ALTER TABLE `activity_logs`
-  MODIFY `id_log` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_log` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `cart_details`
 --
 ALTER TABLE `cart_details`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `product_images`
@@ -895,19 +906,19 @@ ALTER TABLE `product_images`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
