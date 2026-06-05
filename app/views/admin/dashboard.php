@@ -47,7 +47,6 @@ function fmtK($n){if($n>=1000000)return 'Rp '.round($n/1000000,1).'jt';if($n>=10
       <div class="card-body">
         <div class="pdd-info">
           <h6>Implementasi: Built-in Function</h6>
-          <p><code>SELECT DATE_FORMAT(created_at,'%b %Y') AS label, SUM(grand_total), COUNT(id) FROM orders GROUP BY bulan</code></p>
         </div>
         <div class="chart-wrap">
           <canvas id="salesChart"></canvas>
