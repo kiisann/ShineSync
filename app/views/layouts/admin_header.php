@@ -68,7 +68,12 @@ function adminNavActive(string $segment, string $current): string {
     <a href="<?= APP_URL ?>/admin/reports" class="sidebar-link <?= adminNavActive('reports', $segment1) ?>">
       <i class="fas fa-chart-bar"></i> Laporan &amp; Analitik
     </a>
+    <div class="sidebar-label">Backup</div>
 
+    <a href="<?= APP_URL ?>/admin/backup-list"
+      class="sidebar-link <?= adminNavActive('backup-list', $segment1) ?>">
+      <i class="fas fa-database"></i> Backup Database
+    </a>
     <div class="sidebar-label" style="margin-top:20px;"></div>
     <a href="<?= APP_URL ?>/auth/logout" class="sidebar-link" style="color:rgba(220,53,69,.7);">
       <i class="fas fa-sign-out-alt"></i> Logout
