@@ -10,11 +10,6 @@ function fRpAd($n){return 'Rp '.number_format($n,0,',','.');}
   <a href="<?= APP_URL ?>/admin/orders" class="btn-admin-secondary"><i class="fas fa-arrow-left"></i> Kembali</a>
 </div>
 
-<div class="pdd-info mb-4">
-  <h6>SQL JOIN: INNER JOIN pada query detail pesanan</h6>
-  <p><code>orders INNER JOIN users INNER JOIN order_details INNER JOIN products LEFT JOIN payments</code></p>
-</div>
-
 <div class="row g-4">
   <div class="col-lg-8">
     <div class="admin-card mb-4">
