@@ -17,15 +17,6 @@ $grand = $total - $discount;
   <div class="container">
     <h2 class="section-title mb-4">Checkout</h2>
 
-    <!-- Transaction Info -->
-    <div class="alert-gold mb-4">
-      <i class="fas fa-lock"></i>
-      <div>
-        <strong>Proses Transaksi Aman</strong><br>
-        <small>Sistem menggunakan <code>START TRANSACTION → COMMIT/ROLLBACK</code> untuk menjamin keamanan data pesanan Anda.</small>
-      </div>
-    </div>
-
     <form method="POST" action="<?= APP_URL ?>/checkout/process">
       <div class="row g-4">
         <!-- Shipping Info -->
@@ -123,9 +114,6 @@ $grand = $total - $discount;
             <button type="submit" class="btn-gold d-block w-100" style="justify-content:center;padding:15px;border-radius:12px;font-size:.95rem;">
               <i class="fas fa-shield-alt me-2"></i>Konfirmasi Pesanan
             </button>
-            <p style="text-align:center;font-size:.75rem;color:#999;margin-top:12px;">
-              <i class="fas fa-lock me-1"></i>Transaksi diamankan dengan enkripsi SSL
-            </p>
           </div>
         </div>
       </div>

@@ -40,7 +40,6 @@
     <hr>
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 footer-bottom">
       <span>&copy; <?= date('Y') ?> ShineSync. All rights reserved.</span>
-      <span>Powered by PHP Native MVC + MySQL</span>
     </div>
   </div>
 </footer>
