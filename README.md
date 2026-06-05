@@ -34,8 +34,7 @@ public function createViaSP(array $d): int
 }
 ```
 
-**sp_update_produk(...) — Memperbarui data produk**
-**sp_delete_produk(p_id) — Menghapus produk berdasarkan ID**
+
 
 
 
