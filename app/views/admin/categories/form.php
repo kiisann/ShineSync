@@ -1,5 +1,4 @@
 <?php
-// app/views/admin/categories/form.php
 include __DIR__ . '/../../layouts/admin_header.php';
 $isEdit = isset($category);
 ?>

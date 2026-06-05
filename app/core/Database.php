@@ -1,5 +1,5 @@
 <?php
-// app/core/Database.php — Singleton wrapper untuk mysqli
+// Singleton wrapper untuk mysqli
 class Database
 {
     private static ?Database $instance = null;
@@ -32,7 +32,7 @@ class Database
         return $this->conn;
     }
 
-    // ── Query Helpers ──────────────────────────────────────────
+    // Query Helpers
 
     /** Eksekusi query dan kembalikan result (array of rows) */
     public function query(string $sql, array $params = []): array
@@ -81,7 +81,7 @@ class Database
         return $this->conn->affected_rows;
     }
 
-    // ── Stored Procedure ──────────────────────────────────────
+    // Stored Procedure
 
     /** Panggil stored procedure, kembalikan array of rows */
     public function callProcedure(string $procedure, array $params = []): array
@@ -110,8 +110,7 @@ class Database
         return $rows;
     }
 
-    // ── Transaction ───────────────────────────────────────────
-
+    // Transaction 
     public function beginTransaction(): void
     {
         $this->conn->autocommit(false);
@@ -130,14 +129,14 @@ class Database
         $this->conn->autocommit(true);
     }
 
-    // ── Escape ────────────────────────────────────────────────
+    // Escape
 
     public function escape(string $value): string
     {
         return $this->conn->real_escape_string($value);
     }
 
-    // ── Private Helpers ───────────────────────────────────────
+    // Private Helpers
 
     private function prepare(string $sql, array $params): mysqli_stmt
     {

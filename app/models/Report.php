@@ -1,9 +1,9 @@
 <?php
-// app/models/Report.php
+
 // Implementasi: VIEW, SQL JOIN, SET OPERATIONS (UNION & UNION ALL)
 class Report extends Model
 {
-    // ── VIEW: Laporan Penjualan ───────────────────────────────
+    // VIEW: Laporan Penjualan
     public function getLaporanPenjualan(string $dateFrom = '', string $dateTo = ''): array
     {
         $where = ''; $params = [];
@@ -26,7 +26,7 @@ class Report extends Model
         ) ?? [];
     }
 
-    // ── VIEW: Produk Terlaris ─────────────────────────────────
+    // VIEW: Produk Terlaris
     public function getProdukTerlaris(int $limit = 10): array
     {
         return $this->db->query(
@@ -34,7 +34,7 @@ class Report extends Model
         );
     }
 
-    // ── VIEW: Customer Aktif ──────────────────────────────────
+    // VIEW: Customer Aktif
     public function getCustomerAktif(int $limit = 10): array
     {
         return $this->db->query(
@@ -42,7 +42,7 @@ class Report extends Model
         );
     }
 
-    // ── SET OPERATIONS: UNION ─────────────────────────────────
+    // SET OPERATIONS: UNION
     // Customer yang pernah ORDER atau pernah REVIEW (hapus duplikat)
     public function getCustomerAktifUnion(): array
     {
@@ -61,7 +61,7 @@ class Report extends Model
         );
     }
 
-    // ── SET OPERATIONS: UNION ALL ─────────────────────────────
+    // SET OPERATIONS: UNION ALL
     // Produk Cincin + Kalung (pertahankan semua, termasuk duplikat)
     public function getInventarisUnionAll(): array
     {
@@ -82,7 +82,7 @@ class Report extends Model
         );
     }
 
-    // ── Grafik per kategori (built-in functions) ──────────────
+    // Grafik per kategori (built-in functions)
     public function getSalesByCategory(): array
     {
         return $this->db->query(

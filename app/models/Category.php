@@ -1,5 +1,4 @@
 <?php
-// app/models/Category.php
 class Category extends Model
 {
     public function getAll(): array

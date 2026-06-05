@@ -1,5 +1,5 @@
 <?php
-// app/views/admin/reports/index.php — PDD: VIEW + JOIN + UNION + UNION ALL
+// PDD: VIEW + JOIN + UNION + UNION ALL
 include __DIR__ . '/../../layouts/admin_header.php';
 function fRpR($n){return 'Rp '.number_format($n,0,',','.');}
 ?>

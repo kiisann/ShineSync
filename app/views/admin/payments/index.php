@@ -1,5 +1,4 @@
 <?php
-// app/views/admin/payments/index.php
 include __DIR__ . '/../../layouts/admin_header.php';
 ?>
 <div class="admin-page-header"><h2>Verifikasi Pembayaran</h2></div>

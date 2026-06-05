@@ -1,5 +1,4 @@
 <?php
-// app/models/Wishlist.php
 class Wishlist extends Model
 {
     public function getByUser(int $userId): array

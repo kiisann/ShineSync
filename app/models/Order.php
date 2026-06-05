@@ -1,5 +1,4 @@
 <?php
-// app/models/Order.php
 class Order extends Model
 {
     public function create(array $d): int
@@ -120,14 +119,14 @@ class Order extends Model
         return (float)($row['total'] ?? 0);
     }
 
-    // Grafik penjualan 12 bulan terakhir (built-in SQL function)
+    // Grafik penjualan 12 bulan terakhir (total_amount diupdate oleh trigger tr_update_total_order)
     public function getMonthlySales(): array
     {
         return $this->db->query(
             "SELECT DATE_FORMAT(o.created_at,'%Y-%m') AS bulan,
                     DATE_FORMAT(o.created_at,'%b %Y')  AS label,
                     COUNT(o.id)                         AS jumlah_order,
-                    SUM(o.grand_total)                  AS total_pendapatan
+                    SUM(o.total_amount)                 AS total_pendapatan
              FROM orders o
              INNER JOIN payments p ON o.id = p.order_id
              WHERE p.status = 'verified'
